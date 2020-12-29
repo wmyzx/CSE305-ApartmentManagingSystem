@@ -6,23 +6,27 @@
 session_start();
 include "config.php";
 
-if(isset($_POST['but_submit'])){
+if(isset($_POST['but_submit']))
+{
 
     $uname = mysqli_real_escape_string($con,$_POST['txt_uname']);
     $password = mysqli_real_escape_string($con,$_POST['txt_pwd']);
 
-    if (empty($uname)) {
-             echo '<script language="javascript">';
-             echo 'alert("Username is required")';
-             echo '</script>';
-  }
-  if (empty($password)) {
-             echo '<script language="javascript">';
-             echo 'alert("Password is required")';
-             echo '</script>';
-  }
+    if (empty($uname)) 
+    {
+      echo '<script language="javascript">';
+      echo 'alert("Username is required")';
+      echo '</script>';
+    }
+  if (empty($password)) 
+    {
+      echo '<script language="javascript">';
+      echo 'alert("Password is required")';
+      echo '</script>';
+    }
 
-    if ($uname != "" && $password != ""){
+    if ($uname != "" && $password != "")
+    {
         $password = md5($password);
         $sql_query = "select count(*) as cntUser from users where loginname='".$uname."' and pwd='".$password."'";
         $result = mysqli_query($con,$sql_query);
@@ -34,27 +38,33 @@ if(isset($_POST['but_submit'])){
 
 
         $count = $row['cntUser'];
-        $admin = $row1['level'];
-
+        $isadmin = $row1['isadmin'];
+        $name = $row1['firstname'];
+        $lastname = $row1['lastname'];
         
-        if($count > 0){
-            
-            if ($admin == "admin")
+        $_SESSION['isadmin']=$isadmin;
+        $_SESSION['name']=$row1['firstname'];
+        $_SESSION['lastname']=$lastname;
+        $_SESSION['id']=$row1['id'];
+        if($count > 0)
+        {
+            if ($isadmin == "1")
                 {
-                $_SESSION['uname'] = $user;
-                header("location: admin.php");
+                header("location: admin/home.php");
                 exit();
                 }   
-            else {
-                $_SESSION['uname'] = $user;
-                header("location: users.php");
+             else 
+             {
+                header("location: users/home.php");
                 exit();
-            }
-        }else{
+             }
+        }
+             else
+             {
              echo '<script language="javascript">';
              echo 'alert("Invalid username or password")';
              echo '</script>';
-        }
+             }
 
     }
 
