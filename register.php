@@ -13,6 +13,7 @@ if (isset($_POST['but_submit'])) {
   $username = mysqli_real_escape_string($con, $_POST['username']);
   $phonenumber = mysqli_real_escape_string($con, $_POST['phonenumber']);
   $email = mysqli_real_escape_string($con, $_POST['email']);
+  $doornumber = mysqli_real_escape_string($con, $_POST['doornumber']);
   $password_1 = mysqli_real_escape_string($con, $_POST['password_1']);
   $password_2 = mysqli_real_escape_string($con, $_POST['password_2']);
 
@@ -22,13 +23,14 @@ if (isset($_POST['but_submit'])) {
   if (empty($phonenumber)) { array_push($errors, "Phone number is required"); }
   if (empty($username)) { array_push($errors, "Username is required"); }
   if (empty($email)) { array_push($errors, "Email is required"); }
+  if (empty($doornumber)) { array_push($errors, "Door Number is required"); }
   if (empty($password_1)) { array_push($errors, "Password is required"); }
   if ($password_1 != $password_2) {
    array_push($errors, "The two passwords do not match");
   }
 
 
-  $user_check_query = "SELECT * FROM users WHERE loginname='$username' OR email='$email' LIMIT 1";
+  $user_check_query = "SELECT * FROM users WHERE loginname='$username' OR email='$email' OR doornumber='$doornumber' LIMIT 1";
   $result = mysqli_query($con, $user_check_query);
   $user = mysqli_fetch_assoc($result);
   
@@ -40,17 +42,21 @@ if (isset($_POST['but_submit'])) {
     if ($user['email'] == $email) {
       array_push($errors, "Email already exists");
     }
+    if ($user['doornumber'] == $doornumber && $user['status'] == 'active') {
+      array_push($errors, "Door number already exists");
+    }
+
   }
 
+  
 
   if (count($errors) == 0) {
     $password = md5($password_1);
 
-    $query = "INSERT INTO users (firstname, lastname, loginname, pwd, email, phonenumber) 
-              VALUES('$fname', '$lname', '$username', '$password', '$email', '$phonenumber')";
+    $query = "INSERT INTO users (firstname, lastname, loginname, pwd, email, phonenumber, doornumber, status) 
+              VALUES('$fname', '$lname', '$username', '$password', '$email', '$phonenumber', '$doornumber', 'active')";
     mysqli_query($con, $query);
     $_SESSION['username'] = $username;
-    $_SESSION['success'] = "You are now logged in";
     header('location: login.php');
   }
 }
@@ -107,6 +113,10 @@ if (isset($_POST['but_submit'])) {
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputUsername">Phone Number</label>
                                                 <input class="form-control py-4" id="inputPhoneNumber" name="phonenumber" type="text" placeholder="Enter Phone Number" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Door Number</label>
+                                                <input class="form-control py-4" id="inputDoorNumber" name="doornumber" type="number" min="1" max="15" placeholder="Enter Door Number" />
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputUsername">Username</label>

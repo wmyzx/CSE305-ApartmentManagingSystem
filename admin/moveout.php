@@ -5,9 +5,11 @@
 include "checkadminlogin.php";
 include "../config.php";
 
-        $duesquery = "SELECT SUM(price) FROM transaction WHERE paydate >= '2020/12/01' and paydate <= '2020/12/31'";
-         $result = mysqli_query($con, $duesquery);
+        $movequery = "SELECT id, doornumber FROM users WHERE status='active'  ORDER BY 'doornumber' ASC ";
+         $result = mysqli_query($con, $movequery);
          $row = mysqli_fetch_array($result);
+
+
          
   ?>
 
@@ -91,79 +93,31 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="row">
-                      <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Due (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-7">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Move Out Resident</h3></div>
+                                    <div class="card-body">
+                                        <form method="post" action="">
+                                         <div class="form-group">
+                                     <label for="c-form-profession">
+                                         <span class="label-text">Select a Door number that the person who Move out</span> 
+                                         <span class="contact-error"></span>
+                                     </label>
+                                 <select name="moveout" class="c-form-profession form-control" id="c-form-profession">
+                                    <?php
+                                            while($row = mysqli_fetch_array($result)){   
+                                                    unset($id, $name);
+                                                    $id = $row['id'];
+                                                     $doornumber = $row['doornumber']; 
+                                                      echo '<option value="'.$id.'">'.$doornumber.'</option>';
+                                            }
+                                            ?>
+                                 </select>
                             </div>
-                        </div>
-                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Income</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $row[0] . " TL "; ?></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                                Total Expanse</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Debt</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <div class="container-fluid">
-                        <h1 class="mt-4">Announcement</h1>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            </div>
-                        </div>
-                    </div>
+                         <input type="submit" class="btn btn-primary btn-block" value="Confirm" name="but_submit" id="but_submit" href="home.php"/>                            
+                    </form>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">

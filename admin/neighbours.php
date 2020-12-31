@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
  <?php 
-include "checkuserlogin.php";
+include "checkadminlogin.php";
 include "../config.php";
 
-        $duesquery = "SELECT SUM(price) FROM transaction WHERE paydate >= '2020/12/01' and paydate <= '2020/12/31'";
-         $result = mysqli_query($con, $duesquery);
-         $row = mysqli_fetch_array($result);
-         
-  ?>
+	
 
+	$neigquery = "SELECT * FROM users ";
+  	$result = mysqli_query($con, $neigquery);
+  	
+  	
+?>
 
 
 <head>
@@ -68,10 +70,14 @@ include "../config.php";
                                     
                                 </nav>
                             </div>
-                            <div class="sb-sidenav-menu-heading">Neighbours</div>
+                            <div class="sb-sidenav-menu-heading">Residents</div>
                             <a class="nav-link" href="neighbours.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Neighbours List
+                                Residents List
+                            </a>
+                            <a class="nav-link" href="moveout.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Move Out Residents
                             </a>
                             
                         </div>
@@ -85,79 +91,64 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                	<div class="row">
-                	  <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Due (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Income</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $row[0] . " TL "; ?></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                                Total Expanse</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Debt</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <div class="container-fluid">
-                        <h1 class="mt-4">Announcement</h1>
+                	 
+                	 <div class="container-fluid">
+                        <h1 class="mt-4">Residents List</h1>
+                        
+                        
                         <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table mr-1"></i>
+                                Residents List
+                            </div>
                             <div class="card-body">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Surname</th>
+                                                <th>Username</th>
+                                                <th>Door Number</th>
+                                                <th>Phone Number</th>
+                                                <th>E-mail</th>
+                                                <th>Register Date</th>
+                                                <th>Quit Date</th>
+                                                <th>isAdmin</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Surname</th>
+                                                <th>Username</th>
+                                                <th>Door Number</th>
+                                                <th>Phone Number</th>
+                                                <th>E-mail</th>
+                                                <th>Register Date</th>
+                                                <th>Quit Date</th>
+                                                <th>isAdmin</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        	<?php
+                                        	while($row = mysqli_fetch_array($result)){   
+											echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>" . $row['doornumber'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $row['isadmin'] . "</td><td>" . $row['status'] . "</td></tr>";  
+											}
+											?>
+                                            
+                                          
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+
+                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
@@ -176,5 +167,8 @@ include "../config.php";
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-demo.js"></script>
     </body>
 </html>

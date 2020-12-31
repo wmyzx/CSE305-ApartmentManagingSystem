@@ -5,10 +5,37 @@
 include "checkuserlogin.php";
 include "../config.php";
 
-        $duesquery = "SELECT SUM(price) FROM transaction WHERE paydate >= '2020/12/01' and paydate <= '2020/12/31'";
-         $result = mysqli_query($con, $duesquery);
-         $row = mysqli_fetch_array($result);
-         
+$errors = array(); 
+
+    if (isset($_POST['but_submit'])) {
+
+    $fname = mysqli_real_escape_string($con, $_POST['fname']);
+    $lname = mysqli_real_escape_string($con, $_POST['lname']);
+    $price = mysqli_real_escape_string($con, $_POST['price']);
+    $doornumber = $_SESSION['doornumber'];
+    $userid = $_SESSION['id'];
+    $date = mysqli_real_escape_string($con, $_POST['date']);
+    
+    if (empty($fname)) { array_push($errors, "First Name is required"); }
+    if (empty($lname)) { array_push($errors, "Last Name is required");}
+    if (empty($price)) { array_push($errors, "Price is required"); }
+    if (empty($date)) { array_push($errors, "Date is required"); }
+
+    if($price <= 0) {
+        array_push($errors, "Please enter valid price");
+    }
+
+
+    if (count($errors) == 0) {
+    
+
+         $query = "INSERT INTO transaction (name, surname, price, doornumber, userid, paydate) 
+              VALUES('$fname', '$lname', '$price', '$doornumber', '$userid', '$date')";
+         mysqli_query($con, $query);
+         header("location: home.php");
+  }
+}
+
   ?>
 
 
@@ -85,79 +112,68 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                	<div class="row">
-                	  <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Due (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
+                	 <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-7">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-body">
+                                        <form method="post" action="">
+                                            <?php include('errors.php'); ?>
+                                            <div class="form-row">
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="inputFirstName">First Name</label>
+                                                        <input class="form-control py-4" id="inputFirstName" name="fname" type="text" placeholder="Enter First Name" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="inputLastName">Last Name</label>
+                                                        <input class="form-control py-4" id="inputLastName" name="lname" type="text" placeholder="Enter Last Name" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Price</label>
+                                                <input class="form-control py-4" id="inputPrice" name="price" type="number" placeholder="Enter Price" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Name On Card</label>
+                                                <input class="form-control py-4" id="inputPrice" name="cardname" type="text" placeholder="Enter Name On Card" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Card Number</label>
+                                                <input class="form-control py-4" id="inputPrice" name="cardnumber" type="number" placeholder="Enter Card Number" />
+                                            </div>
+                                            <div class="form-row">
+                                            <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="inputFirstName">Expiry Date</label>
+                                                        <input class="form-control py-4" id="inputFirstName" name="expdate" type="text" placeholder="Expiry Date (MM/YY)" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="inputLastName">CCV</label>
+                                                        <input class="form-control py-4" id="inputLastName" name="ccv" type="text" placeholder="CCV" />
+                                                    </div>
+                                                </div>
+
+                                            <input type="submit" class="btn btn-primary btn-block" value="Pay Now" name="but_submit" id="but_submit" href="login.php"/>
+                                    
+                                        </form>
                                     </div>
+                                
                                 </div>
-                            </div>
-                        </div>
-                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Income</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $row[0] . " TL "; ?></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                                Total Expanse</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Debt</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <div class="container-fluid">
-                        <h1 class="mt-4">Announcement</h1>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             </div>
                         </div>
                     </div>
+
+
+
+
+                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">

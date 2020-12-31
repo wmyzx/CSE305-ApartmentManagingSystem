@@ -38,24 +38,32 @@ if(isset($_POST['but_submit']))
 
 
         $count = $row['cntUser'];
+        
         $isadmin = $row1['isadmin'];
         $name = $row1['firstname'];
         $lastname = $row1['lastname'];
-        
+        $active = $row1['status'];
+    
         $_SESSION['isadmin']=$isadmin;
         $_SESSION['name']=$row1['firstname'];
         $_SESSION['lastname']=$lastname;
         $_SESSION['id']=$row1['id'];
-        if($count > 0)
+        $_SESSION['doornumber']=$row1[7];
+
+
+       if($count > 0)
         {
             if ($isadmin == "1")
                 {
                 header("location: admin/home.php");
                 exit();
                 }   
-             else 
+             else if($active == 'active')
              {
                 header("location: users/home.php");
+                exit();
+             } else {
+                echo 'Something went wrong';
                 exit();
              }
         }
