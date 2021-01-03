@@ -5,21 +5,31 @@
 include "checkadminlogin.php";
 include "../config.php";
 
-        $movequery = "SELECT id, doornumber FROM users WHERE status='active'  ORDER BY doornumber ASC ";
-         $result = mysqli_query($con, $movequery);
+    $errors = array(); 
+
+    if (isset($_POST['but_submit'])) {
+        
+        $name = mysqli_real_escape_string($con, $_POST['name']);
+        $price = mysqli_real_escape_string($con, $_POST['price']);
+        $details = mysqli_real_escape_string($con, $_POST['details']);
+
+        if (empty($name)) { array_push($errors, "Name is required"); }
+        if (empty($price)) { array_push($errors, "Price is required");}
+        if (empty($details)) { array_push($errors, "Details is required"); }
+
+         if($price <= 0) {
+        array_push($errors, "Please enter valid price");
+    }
+
+    if (count($errors) == 0) {
+        
+
+         $query = "INSERT INTO expanse (name, price, details) 
+              VALUES('$name', '$price', '$details')";
+         mysqli_query($con, $query);
          
-         
-
-         if (isset($_POST['but_submit'])) {
-
-            $selectOption = $_POST['moveout'];
-            
-            $updatequery = "UPDATE users SET quit_date = CURRENT_TIMESTAMP, status = 'inactive' WHERE id='$selectOption'";
-            mysqli_query($con, $updatequery);
-            header('location: home.php');
-
          }
-         
+     }
   ?>
 
 
@@ -107,31 +117,35 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="container">
+                   <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Move Out Resident</h3></div>
                                     <div class="card-body">
-                                        <form method="post" action="">
-                                         <div class="form-group">
-                                     <label for="c-form-profession">
-                                         <span class="label-text">Select a Door number that the person who Move out</span> 
-                                         <span class="contact-error"></span>
-                                     </label>
-                                 <select name="moveout" class="c-form-profession form-control" id="c-form-profession">
-                                    <?php
-                                            while($row = mysqli_fetch_array($result)){   
-                                                    unset($id, $name);
-                                                    $id = $row['id'];
-                                                     $doornumber = $row['doornumber']; 
-                                                      echo '<option value="'.$id.'">'.$doornumber.'</option>';
-                                            }
-                                            ?>
-                                 </select>
+                                        <form method="post" action="" id="form1">
+                                            <?php include('errors.php'); ?>
+                                             <div class="form-group">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Who spent?</label>
+                                                <input class="form-control py-4" id="inputPrice" name="name" type="text" placeholder="Enter Name " />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Price</label>
+                                                <input class="form-control py-4" id="inputPrice" name="price" type="text" placeholder="Enter Price" />
+                                            </div>
+                                            <div class="form-group">
+                                            <label class="small mb-1" for="inputUsername">Details</label>
+                                            <textarea  class="form-control" name="details" id="form1" rows="5" placeholder="Enter Details"></textarea>
+                                            </div>
+                                            <input type="submit" class="btn btn-primary btn-block" value="Confirm" name="but_submit" id="but_submit"/>
+                                    
+                                        </form>
+                                    </div>
+                                
+                                </div>
                             </div>
-                         <input type="submit" class="btn btn-primary btn-block" value="Confirm" name="but_submit" id="but_submit" href="home.php"/>                            
-                    </form>
+                        </div>
+                    </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">

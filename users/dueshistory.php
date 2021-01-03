@@ -75,7 +75,10 @@ include "../config.php";
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Neighbours List
                             </a>
-                            
+                            <a class="nav-link" href="flathistory.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Flat History
+                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
@@ -90,8 +93,6 @@ include "../config.php";
                 	 
                 	 <div class="container-fluid">
                         <h1 class="mt-4">Dues History</h1>
-                        
-                        
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>

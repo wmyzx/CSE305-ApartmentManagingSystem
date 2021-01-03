@@ -35,7 +35,7 @@ include "../config.php";
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="logoutcustomer.php">Logout</a>
+                        <a class="dropdown-item" href="logoutadmin.php">Logout</a>
                     </div>
                 </li>
             </ul>
@@ -58,7 +58,8 @@ include "../config.php";
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="aidat.php">Dues</a>
+                                    <a class="nav-link" href="detdues.php">Determine Dues</a>
+                                    <a class="nav-link" href="expenses.php">Expenses</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
                                 </nav>
                             </div>
@@ -74,6 +75,10 @@ include "../config.php";
                             <a class="nav-link" href="neighbours.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Residents List
+                            </a>
+                            <a class="nav-link" href="addnewresident.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Add New Residents
                             </a>
                             <a class="nav-link" href="moveout.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>

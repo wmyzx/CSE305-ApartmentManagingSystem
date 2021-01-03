@@ -5,21 +5,37 @@
 include "checkadminlogin.php";
 include "../config.php";
 
-        $movequery = "SELECT id, doornumber FROM users WHERE status='active'  ORDER BY doornumber ASC ";
-         $result = mysqli_query($con, $movequery);
-         
-         
-
+         $errors = array(); 
          if (isset($_POST['but_submit'])) {
+            $doornumber = mysqli_real_escape_string($con, $_POST['doornumber']);
+             $floor = mysqli_real_escape_string($con, $_POST['floor']);
+             $block = mysqli_real_escape_string($con, $_POST['block']);
 
-            $selectOption = $_POST['moveout'];
-            
-            $updatequery = "UPDATE users SET quit_date = CURRENT_TIMESTAMP, status = 'inactive' WHERE id='$selectOption'";
-            mysqli_query($con, $updatequery);
-            header('location: home.php');
+             if (empty($doornumber)) { array_push($errors, "Door Number is required"); }
+             if (empty($floor)) { array_push($errors, "Floor is required");}
+            if (empty($block)) { array_push($errors, "Block is required"); }
 
-         }
-         
+
+            $user_check_query = "SELECT * FROM flat WHERE doornumber='$doornumber' LIMIT 1";
+             $result = mysqli_query($con, $user_check_query);
+            $user = mysqli_fetch_assoc($result);
+
+            if ($user) { 
+    if ($user['doornumber'] == $doornumber) {
+      array_push($errors, "Username already exists");
+    }
+
+  }
+
+
+            if (count($errors) == 0) {
+    
+
+            $query = "INSERT INTO flat (doornumber, floor, block) 
+              VALUES('$doornumber', '$floor', '$block')";
+             mysqli_query($con, $query);
+            }
+        }
   ?>
 
 
@@ -107,31 +123,28 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="container">
+                 <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Move Out Resident</h3></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Add New Resident</h3></div>
                                     <div class="card-body">
                                         <form method="post" action="">
-                                         <div class="form-group">
-                                     <label for="c-form-profession">
-                                         <span class="label-text">Select a Door number that the person who Move out</span> 
-                                         <span class="contact-error"></span>
-                                     </label>
-                                 <select name="moveout" class="c-form-profession form-control" id="c-form-profession">
-                                    <?php
-                                            while($row = mysqli_fetch_array($result)){   
-                                                    unset($id, $name);
-                                                    $id = $row['id'];
-                                                     $doornumber = $row['doornumber']; 
-                                                      echo '<option value="'.$id.'">'.$doornumber.'</option>';
-                                            }
-                                            ?>
-                                 </select>
-                            </div>
-                         <input type="submit" class="btn btn-primary btn-block" value="Confirm" name="but_submit" id="but_submit" href="home.php"/>                            
-                    </form>
+                                            <?php include('../errors.php'); ?>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Door Number:</label>
+                                                <input class="form-control py-4" id="inputPhoneNumber" name="doornumber" type="text" placeholder="Enter Door Number" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Floor:</label>
+                                                <input class="form-control py-4" id="inputPhoneNumber" name="floor" type="text" placeholder="Enter Floor" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Block:</label>
+                                                <input class="form-control py-4" id="inputPhoneNumber" name="block" type="text" placeholder="Enter Block" />
+                                            </div>
+                                            <input type="submit" class="btn btn-primary btn-block" value="Confirm" name="but_submit" id="but_submit" href="home.php"/>     
+                                             </form>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">

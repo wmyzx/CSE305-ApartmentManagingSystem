@@ -5,21 +5,11 @@
 include "checkadminlogin.php";
 include "../config.php";
 
-        $movequery = "SELECT id, doornumber FROM users WHERE status='active'  ORDER BY doornumber ASC ";
-         $result = mysqli_query($con, $movequery);
-         
-         
+        
+    
 
-         if (isset($_POST['but_submit'])) {
-
-            $selectOption = $_POST['moveout'];
-            
-            $updatequery = "UPDATE users SET quit_date = CURRENT_TIMESTAMP, status = 'inactive' WHERE id='$selectOption'";
-            mysqli_query($con, $updatequery);
-            header('location: home.php');
-
-         }
-         
+    $duesquery = "SELECT doornumber, userid, name, surname, price, paydate FROM transaction ";
+    $result = mysqli_query($con, $duesquery);
   ?>
 
 
@@ -107,31 +97,54 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-7">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Move Out Resident</h3></div>
-                                    <div class="card-body">
-                                        <form method="post" action="">
-                                         <div class="form-group">
-                                     <label for="c-form-profession">
-                                         <span class="label-text">Select a Door number that the person who Move out</span> 
-                                         <span class="contact-error"></span>
-                                     </label>
-                                 <select name="moveout" class="c-form-profession form-control" id="c-form-profession">
-                                    <?php
-                                            while($row = mysqli_fetch_array($result)){   
-                                                    unset($id, $name);
-                                                    $id = $row['id'];
-                                                     $doornumber = $row['doornumber']; 
-                                                      echo '<option value="'.$id.'">'.$doornumber.'</option>';
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Dues History</h1>
+                        
+                        
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table mr-1"></i>
+                                Dues History
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Surname</th>
+                                                <th>Door Number</th>
+                                                <th>Price</th>
+                                                <th>Pay Date</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Surname</th>
+                                                <th>Door Number</th>
+                                                <th>Price</th>
+                                                <th>Pay Date</th>
+                                                
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                            <?php
+                                            while($row = mysqli_fetch_array($result)){   //Creates a loop to loop through results
+                                            echo "<tr><td>" . $row['name'] . "</td><td>" . $row['surname'] . "</td><td>" . $row['doornumber'] ."</td><td>" . $row['price'] . "</td><td>" . $row['paydate'] . "</td></tr>";  //$row['index'] the index here is a field name
                                             }
                                             ?>
-                                 </select>
+                                            
+                                          
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                         <input type="submit" class="btn btn-primary btn-block" value="Confirm" name="but_submit" id="but_submit" href="home.php"/>                            
-                    </form>
+                        </div>
+                    </div>
+
+
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
@@ -150,5 +163,8 @@ include "../config.php";
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-demo.js"></script>
     </body>
 </html>

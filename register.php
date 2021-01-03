@@ -48,8 +48,7 @@ if (isset($_POST['but_submit'])) {
 
   }
 
-  
-
+ 
   if (count($errors) == 0) {
     $password = md5($password_1);
 
@@ -114,9 +113,24 @@ if (isset($_POST['but_submit'])) {
                                                 <label class="small mb-1" for="inputUsername">Phone Number</label>
                                                 <input class="form-control py-4" id="inputPhoneNumber" name="phonenumber" type="text" placeholder="Enter Phone Number" />
                                             </div>
+                                            <?php 
+                                            $query = "SELECT doornumber FROM flat ORDER BY doornumber ASC" ?>
                                             <div class="form-group">
-                                                <label class="small mb-1" for="inputUsername">Door Number</label>
-                                                <input class="form-control py-4" id="inputDoorNumber" name="doornumber" type="number" min="1" max="15" placeholder="Enter Door Number" />
+                                                <label for="c-form-profession">
+                                               <span class="label-text">Door number</span> 
+                                              <span class="contact-error"></span>
+                                              </label>
+                                              <select name="doornumber" class="c-form-profession form-control" id="c-form-profession">
+                                          <?php
+                                            $result = mysqli_query($con, $query);
+                                            while($row = mysqli_fetch_array($result)){   
+                                                    unset($id, $name);
+                                                    $id = $row['id'];
+                                                     $doornumber = $row['doornumber']; 
+                                                      echo '<option value="'.$doornumber.'">'.$doornumber.'</option>';
+                                            }
+                                            ?>
+                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputUsername">Username</label>

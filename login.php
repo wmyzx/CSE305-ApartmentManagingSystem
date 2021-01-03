@@ -63,7 +63,7 @@ if(isset($_POST['but_submit']))
                 header("location: users/home.php");
                 exit();
              } else {
-                echo 'Something went wrong';
+                echo 'You listed as inactive. It means you move out. If you dont think like that, please contact administrator';
                 exit();
              }
         }

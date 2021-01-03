@@ -14,12 +14,12 @@ $errors = array();
     $price = mysqli_real_escape_string($con, $_POST['price']);
     $doornumber = $_SESSION['doornumber'];
     $userid = $_SESSION['id'];
-    $date = mysqli_real_escape_string($con, $_POST['date']);
+    
     
     if (empty($fname)) { array_push($errors, "First Name is required"); }
     if (empty($lname)) { array_push($errors, "Last Name is required");}
     if (empty($price)) { array_push($errors, "Price is required"); }
-    if (empty($date)) { array_push($errors, "Date is required"); }
+   
 
     if($price <= 0) {
         array_push($errors, "Please enter valid price");
@@ -29,8 +29,8 @@ $errors = array();
     if (count($errors) == 0) {
     
 
-         $query = "INSERT INTO transaction (name, surname, price, doornumber, userid, paydate) 
-              VALUES('$fname', '$lname', '$price', '$doornumber', '$userid', '$date')";
+         $query = "INSERT INTO transaction (name, surname, price, doornumber, userid) 
+              VALUES('$fname', '$lname', '$price', '$doornumber', '$userid')";
          mysqli_query($con, $query);
          header("location: home.php");
   }
@@ -100,7 +100,10 @@ $errors = array();
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Neighbours List
                             </a>
-                            
+                            <a class="nav-link" href="flathistory.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Flat History
+                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
@@ -150,7 +153,7 @@ $errors = array();
                                             <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputFirstName">Expiry Date</label>
-                                                        <input class="form-control py-4" id="inputFirstName" name="expdate" type="text" placeholder="Expiry Date (MM/YY)" />
+                                                        <input class="form-control py-4" id="inputFirstName" name="expdate" type="month" placeholder="Expiry Date (MM/YY)" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">

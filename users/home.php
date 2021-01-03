@@ -5,10 +5,27 @@
 include "checkuserlogin.php";
 include "../config.php";
 
-        $duesquery = "SELECT SUM(price) FROM transaction WHERE paydate >= '2020/12/01' and paydate <= '2020/12/31'";
+
+
+         $duesquery = "SELECT SUM(price) FROM transaction WHERE paydate >= '2021/01/01' and paydate <= '2021/01/31'";
          $result = mysqli_query($con, $duesquery);
          $row = mysqli_fetch_array($result);
+
+         $doornumber = $_SESSION['doornumber'];
+
+         $monthquery = "SELECT dues FROM flat WHERE doornumber='$doornumber'";
+         $result1 = mysqli_query($con, $monthquery);
+         $row1 = mysqli_fetch_array($result1);
          
+         $duesquery1 = "SELECT SUM(price) FROM transaction WHERE paydate >= '2021/01/01' and paydate <= '2021/01/31' and doornumber='$doornumber'";
+         $result2 = mysqli_query($con, $duesquery1);
+         $row2 = mysqli_fetch_array($result2);
+
+         $duesquery2 = "SELECT SUM(price) FROM expanse WHERE adddate >= '2021/01/01' and adddate <= '2021/01/31'";
+         $result3 = mysqli_query($con, $duesquery2);
+         $row3 = mysqli_fetch_array($result3);
+
+         $subs = $row1['dues'] - $row2[0];
   ?>
 
 
@@ -73,6 +90,10 @@ include "../config.php";
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Neighbours List
                             </a>
+                            <a class="nav-link" href="flathistory.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Flat History
+                            </a>
                             
                         </div>
                     </div>
@@ -92,8 +113,24 @@ include "../config.php";
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Due (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                                Dues (Monthly)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $row1['dues'] . " TL "; ?></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Pending Debt(This Month)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $subs . " TL "; ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -108,7 +145,7 @@ include "../config.php";
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Income</div>
+                                                Total Income(All Apartment)</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $row[0] . " TL "; ?></div>
                                         </div>
                                         <div class="col-auto">
@@ -124,8 +161,8 @@ include "../config.php";
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                                Total Expanse</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                                Total Expanse(All Apartment)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $row3[0] . " TL "; ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -134,22 +171,7 @@ include "../config.php";
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Debt</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     <div class="container-fluid">
                         <h1 class="mt-4">Announcement</h1>
                         <div class="card mb-4">
