@@ -8,8 +8,8 @@ include "../config.php";
 
 	
 
-	$neigquery = "SELECT * FROM users ";
-  	$result = mysqli_query($con, $neigquery);
+	$exquery = "SELECT * FROM expense ";
+  	$result = mysqli_query($con, $exquery);
   	
   	
 ?>
@@ -124,13 +124,13 @@ include "../config.php";
                 <main>
                 	 
                 	 <div class="container-fluid">
-                        <h1 class="mt-4">Residents List</h1>
+                        <h1 class="mt-4">Expenses List</h1>
                         
                         
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
-                                Residents List
+                                Expenses List
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -138,35 +138,23 @@ include "../config.php";
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Price</th>
+                                                <th>Date</th>
+                                                <th>Details</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Price</th>
+                                                <th>Date</th>
+                                                <th>Details</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         	<?php
                                         	while($row = mysqli_fetch_array($result)){   
-											echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>" . $row['doornumber'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $row['isadmin'] . "</td><td>" . $row['status'] . "</td></tr>";  
+											echo "<tr><td>" . $row['name'] . "</td><td>" . $row['price'] . "</td><td>" . $row['adddate'] ."</td><td>" . $row['details'] . "</td></tr>";  
 											}
 											?>
                                             

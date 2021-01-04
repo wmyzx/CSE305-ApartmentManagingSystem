@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
  <?php 
 include "checkadminlogin.php";
 include "../config.php";
 
-	
+            
+        $duesquery = "SELECT * FROM flat";
+        $result = mysqli_query($con, $duesquery);
+        $doornumber = array();
+        $result1= array();
+        while($row1 = mysqli_fetch_array($result)){           
+            $subs = $row1[4] - $row1[5];
+            
+        
+            if($subs > 0) {
+                $doornumber[] = array($row1[1]);     
+        }
+        }
+        
+        
+            $duesquery1 = "SELECT * FROM users WHERE doornumber IN (" . implode(",", array_map('intval', $doornumber)) . ")";
+            $result1 = mysqli_query($con, $duesquery1);
+            
+  ?>
 
-	$neigquery = "SELECT * FROM users ";
-  	$result = mysqli_query($con, $neigquery);
-  	
-  	
-?>
+
+
 
 
 <head>
@@ -122,12 +136,9 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                	 
-                	 <div class="container-fluid">
+                   <div class="container-fluid">
                         <h1 class="mt-4">Residents List</h1>
-                        
-                        
-                        <div class="card mb-4">
+                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
                                 Residents List
@@ -141,12 +152,6 @@ include "../config.php";
                                                 <th>Surname</th>
                                                 <th>Username</th>
                                                 <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -155,20 +160,15 @@ include "../config.php";
                                                 <th>Surname</th>
                                                 <th>Username</th>
                                                 <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                        	<?php
-                                        	while($row = mysqli_fetch_array($result)){   
-											echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>" . $row['doornumber'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $row['isadmin'] . "</td><td>" . $row['status'] . "</td></tr>";  
-											}
-											?>
+                                            <?php
+                                            while($row = mysqli_fetch_array($result1)){ 
+                                            echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>" . $row['doornumber'] . "</td></tr>";  
+                                            }
+
+                                            ?>
                                             
                                           
                                         </tbody>
@@ -177,9 +177,6 @@ include "../config.php";
                             </div>
                         </div>
                     </div>
-
-
-                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">

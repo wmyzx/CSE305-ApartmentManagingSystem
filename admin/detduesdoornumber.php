@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
  <?php 
 include "checkadminlogin.php";
 include "../config.php";
 
-	
 
-	$neigquery = "SELECT * FROM users ";
-  	$result = mysqli_query($con, $neigquery);
-  	
-  	
-?>
+         $movequery = "SELECT doornumber FROM flat ORDER BY doornumber ASC  ";
+         $result = mysqli_query($con, $movequery);
+
+
+         if (isset($_POST['but_submit'])) {
+
+            $selectOption = $_POST['doornumber'];
+            $rate = $_POST['rate'];
+            
+            $updatequery = "UPDATE flat SET dues = CONVERT(dues * ".(1+$rate/100).",UNSIGNED) WHERE doornumber='$selectOption'";
+            mysqli_query($con, $updatequery);
+            header('location: home.php');
+
+         }
+         
+        
+  ?>
+
+
+
 
 
 <head>
@@ -122,64 +135,37 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                	 
-                	 <div class="container-fluid">
-                        <h1 class="mt-4">Residents List</h1>
-                        
-                        
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table mr-1"></i>
-                                Residents List
+                   
+                     <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-7">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Determine Dues For Door Number</h3></div>
+                                    <div class="card-body">
+                                        <form method="post" action="">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Determine a Rate between (-100) and 100</label>
+                                                <input class="form-control py-4" id="inputPrice" name="rate" type="number" min="-100" max="100" placeholder="Enter Price" />
+                                            </div>
+                                         <div class="form-group">
+                                     <label for="c-form-profession">
+                                         <span class="label-text">Select a Door Number that you want to determine the dues</span> 
+                                         <span class="contact-error"></span>
+                                     </label>
+                                 <select name="doornumber" class="c-form-profession form-control" id="c-form-profession">
+                                    <?php
+                                            while($row = mysqli_fetch_array($result)){   
+                                                
+                                                $doornumber = $row['doornumber'];
+                                                
+                                                echo '<option value="'.$doornumber.'">'.$doornumber.'</option>';
+                                            }
+                                            ?>
+                                 </select>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody>
-                                        	<?php
-                                        	while($row = mysqli_fetch_array($result)){   
-											echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>" . $row['doornumber'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $row['isadmin'] . "</td><td>" . $row['status'] . "</td></tr>";  
-											}
-											?>
-                                            
-                                          
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                         <input type="submit" class="btn btn-primary btn-block" value="Confirm" name="but_submit" id="but_submit" href="home.php"/>                            
+                    </form>
 
-
-                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
@@ -198,8 +184,5 @@ include "../config.php";
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-demo.js"></script>
     </body>
 </html>

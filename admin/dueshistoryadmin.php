@@ -2,17 +2,21 @@
 <html lang="en">
 
 
+
  <?php 
 include "checkadminlogin.php";
 include "../config.php";
 
-	
+    $id = $_SESSION['id'];
 
-	$neigquery = "SELECT * FROM users ";
-  	$result = mysqli_query($con, $neigquery);
-  	
-  	
-?>
+    $duesquery = "SELECT doornumber, userid, name, surname, price, paydate FROM transaction WHERE userid='$id'";
+    $result = mysqli_query($con, $duesquery);
+
+
+  ?>
+
+
+
 
 
 <head>
@@ -68,7 +72,7 @@ include "../config.php";
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseDues" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
+                               <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
@@ -122,15 +126,12 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                	 
-                	 <div class="container-fluid">
-                        <h1 class="mt-4">Residents List</h1>
-                        
-                        
+                   <div class="container-fluid">
+                        <h1 class="mt-4">Dues History</h1>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
-                                Residents List
+                                Dues History
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -139,36 +140,28 @@ include "../config.php";
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Surname</th>
-                                                <th>Username</th>
                                                 <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Price</th>
+                                                <th>Pay Date</th>
+                                                
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Surname</th>
-                                                <th>Username</th>
                                                 <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Price</th>
+                                                <th>Pay Date</th>
+                                                
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                        	<?php
-                                        	while($row = mysqli_fetch_array($result)){   
-											echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>" . $row['doornumber'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $row['isadmin'] . "</td><td>" . $row['status'] . "</td></tr>";  
-											}
-											?>
+                                            <?php
+                                            while($row = mysqli_fetch_array($result)){   //Creates a loop to loop through results
+                                            echo "<tr><td>" . $row['name'] . "</td><td>" . $row['surname'] . "</td><td>" . $row['doornumber'] ."</td><td>" . $row['price'] . "</td><td>" . $row['paydate'] . "</td></tr>";  //$row['index'] the index here is a field name
+                                            }
+                                            ?>
                                             
                                           
                                         </tbody>
@@ -178,8 +171,6 @@ include "../config.php";
                         </div>
                     </div>
 
-
-                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">

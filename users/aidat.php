@@ -87,6 +87,10 @@ $errors = array();
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
                                 </nav>
                             </div>
+                            <a class="nav-link" href="expenselist.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Expenses List
+                            </a>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 
                             </a>

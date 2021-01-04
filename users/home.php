@@ -21,7 +21,7 @@ include "../config.php";
          $result2 = mysqli_query($con, $duesquery1);
          $row2 = mysqli_fetch_array($result2);
 
-         $duesquery2 = "SELECT SUM(price) FROM expanse WHERE adddate >= '2021/01/01' and adddate <= '2021/01/31'";
+         $duesquery2 = "SELECT SUM(price) FROM expense WHERE adddate >= '2021/01/01' and adddate <= '2021/01/31'";
          $result3 = mysqli_query($con, $duesquery2);
          $row3 = mysqli_fetch_array($result3);
 
@@ -77,6 +77,10 @@ include "../config.php";
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
                                 </nav>
                             </div>
+                            <a class="nav-link" href="expenselist.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Expenses List
+                            </a>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 
                             </a>

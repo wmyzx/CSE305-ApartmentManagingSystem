@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
  <?php 
-include "checkadminlogin.php";
+include "checkuserlogin.php";
 include "../config.php";
 
-	
+    $exquery = "SELECT * FROM expense ";
+    $result = mysqli_query($con, $exquery);
 
-	$neigquery = "SELECT * FROM users ";
-  	$result = mysqli_query($con, $neigquery);
-  	
-  	
-?>
+
+  ?>
+
 
 
 <head>
@@ -35,7 +33,7 @@ include "../config.php";
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="logoutadmin.php">Logout</a>
+                        <a class="dropdown-item" href="logoutcustomer.php">Logout</a>
                     </div>
                 </li>
             </ul>
@@ -51,40 +49,21 @@ include "../config.php";
                                 Main Page
                             </a>
                             <div class="sb-sidenav-menu-heading">Payment</div>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues1" aria-expanded="false" aria-controls="collapseLayouts">
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Payment
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseDues1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
-                                    <a class="nav-link" href="dueshistoryadmin.php">Dues History</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Payment(Apartment)
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseDues" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
-                                    <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
                                 </nav>
                             </div>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Expenses
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="expenselist.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Expenses List
                             </a>
-                            <div class="collapse" id="collapseExpenses" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="expenses.php">Expenses</a>
-                                    <a class="nav-link" href="expenselist.php">Expenses List</a>
-                                </nav>
-                            </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 
                             </a>
@@ -93,22 +72,14 @@ include "../config.php";
                                     
                                 </nav>
                             </div>
-                            <div class="sb-sidenav-menu-heading">Residents</div>
+                            <div class="sb-sidenav-menu-heading">Neighbours</div>
                             <a class="nav-link" href="neighbours.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Residents List
+                                Neighbours List
                             </a>
-                            <a class="nav-link" href="addnewresident.php">
+                            <a class="nav-link" href="flathistory.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Add New Residents
-                            </a>
-                            <a class="nav-link" href="moveout.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Move Out Residents
-                            </a>
-                            <a class="nav-link" href="uncollected.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Uncollected Dues List
+                                Flat History
                             </a>
                             
                         </div>
@@ -122,15 +93,14 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                	 
-                	 <div class="container-fluid">
-                        <h1 class="mt-4">Residents List</h1>
+                  <div class="container-fluid">
+                        <h1 class="mt-4">Expenses List</h1>
                         
                         
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
-                                Residents List
+                                Expenses List
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -138,37 +108,25 @@ include "../config.php";
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Price</th>
+                                                <th>Date</th>
+                                                <th>Details</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Price</th>
+                                                <th>Date</th>
+                                                <th>Details</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                        	<?php
-                                        	while($row = mysqli_fetch_array($result)){   
-											echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>" . $row['doornumber'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $row['isadmin'] . "</td><td>" . $row['status'] . "</td></tr>";  
-											}
-											?>
+                                            <?php
+                                            while($row = mysqli_fetch_array($result)){   
+                                            echo "<tr><td>" . $row['name'] . "</td><td>" . $row['price'] . "</td><td>" . $row['adddate'] ."</td><td>" . $row['details'] . "</td></tr>";  
+                                            }
+                                            ?>
                                             
                                           
                                         </tbody>
@@ -178,8 +136,6 @@ include "../config.php";
                         </div>
                     </div>
 
-
-                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
@@ -198,8 +154,5 @@ include "../config.php";
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-demo.js"></script>
     </body>
 </html>

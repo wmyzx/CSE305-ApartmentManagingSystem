@@ -1,18 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
  <?php 
 include "checkadminlogin.php";
 include "../config.php";
 
-	
+       
+    $errors = array(); 
 
-	$neigquery = "SELECT * FROM users ";
-  	$result = mysqli_query($con, $neigquery);
-  	
-  	
-?>
+    if (isset($_POST['but_submit'])) {
+
+    $fname = mysqli_real_escape_string($con, $_POST['fname']);
+    $lname = mysqli_real_escape_string($con, $_POST['lname']);
+    $price = mysqli_real_escape_string($con, $_POST['price']);
+    $doornumber = $_SESSION['doornumber'];
+    $userid = $_SESSION['id'];
+    
+    
+    if (empty($fname)) { array_push($errors, "First Name is required"); }
+    if (empty($lname)) { array_push($errors, "Last Name is required");}
+    if (empty($price)) { array_push($errors, "Price is required"); }
+   
+
+    if($price <= 0) {
+        array_push($errors, "Please enter valid price");
+    }
+
+
+    if (count($errors) == 0) {
+    
+
+         $query = "INSERT INTO transaction (name, surname, price, doornumber, userid) 
+              VALUES('$fname', '$lname', '$price', '$doornumber', '$userid')";
+         mysqli_query($con, $query);
+
+         $query1 = "UPDATE flat SET payment = payment + '$price' WHERE doornumber = '$doornumber'";
+         mysqli_query($con, $query1);
+         header("location: home.php");
+  }
+}
+       
+  ?>
+
+
+
 
 
 <head>
@@ -122,64 +153,63 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                	 
-                	 <div class="container-fluid">
-                        <h1 class="mt-4">Residents List</h1>
-                        
-                        
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table mr-1"></i>
-                                Residents List
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Phone Number</th>
-                                                <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody>
-                                        	<?php
-                                        	while($row = mysqli_fetch_array($result)){   
-											echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>" . $row['doornumber'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $row['isadmin'] . "</td><td>" . $row['status'] . "</td></tr>";  
-											}
-											?>
-                                            
-                                          
-                                        </tbody>
-                                    </table>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-7">
+                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-body">
+                                        <form method="post" action="">
+                                            <?php include('errors.php'); ?>
+                                            <div class="form-row">
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="inputFirstName">First Name</label>
+                                                        <input class="form-control py-4" id="inputFirstName" name="fname" type="text" placeholder="Enter First Name" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="inputLastName">Last Name</label>
+                                                        <input class="form-control py-4" id="inputLastName" name="lname" type="text" placeholder="Enter Last Name" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Price</label>
+                                                <input class="form-control py-4" id="inputPrice" name="price" type="number" placeholder="Enter Price" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Name On Card</label>
+                                                <input class="form-control py-4" id="inputPrice" name="cardname" type="text" placeholder="Enter Name On Card" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Card Number</label>
+                                                <input class="form-control py-4" id="inputPrice" name="cardnumber" type="number" placeholder="Enter Card Number" />
+                                            </div>
+                                            <div class="form-row">
+                                            <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="inputFirstName">Expiry Date</label>
+                                                        <input class="form-control py-4" id="inputFirstName" name="expdate" type="month" placeholder="Expiry Date (MM/YY)" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="small mb-1" for="inputLastName">CCV</label>
+                                                        <input class="form-control py-4" id="inputLastName" name="ccv" type="text" placeholder="CCV" />
+                                                    </div>
+                                                </div>
+
+                                            <input type="submit" class="btn btn-primary btn-block" value="Pay Now" name="but_submit" id="but_submit" href="login.php"/>
+                                    
+                                        </form>
+                                    </div>
+                                
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
