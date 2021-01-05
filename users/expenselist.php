@@ -19,7 +19,7 @@ include "../config.php";
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Daloglu Apartment - Tenant Page</title>
+        <title>Daloglu Apartment - Expense List Page</title>
         <link href="styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -62,7 +62,7 @@ include "../config.php";
                             </div>
                             <a class="nav-link" href="expenselist.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Expenses List
+                                Expense List
                             </a>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 
@@ -75,7 +75,7 @@ include "../config.php";
                             <div class="sb-sidenav-menu-heading">Neighbours</div>
                             <a class="nav-link" href="neighbours.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Neighbours List
+                                Neighbour List
                             </a>
                             <a class="nav-link" href="flathistory.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>

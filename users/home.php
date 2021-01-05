@@ -2,12 +2,12 @@
 <html lang="en">
 
  <?php 
-include "checkuserlogin.php";
+require "checkuserlogin.php";
 include "../config.php";
 
 
 
-         $duesquery = "SELECT SUM(price) FROM transaction WHERE paydate >= '2021/01/01' and paydate <= '2021/01/31'";
+         $duesquery = "SELECT SUM(price) FROM transaction WHERE MONTH(paydate) = MONTH(CURRENT_DATE()) AND YEAR(paydate) = YEAR(CURRENT_DATE())";
          $result = mysqli_query($con, $duesquery);
          $row = mysqli_fetch_array($result);
 
@@ -17,15 +17,17 @@ include "../config.php";
          $result1 = mysqli_query($con, $monthquery);
          $row1 = mysqli_fetch_array($result1);
          
-         $duesquery1 = "SELECT SUM(price) FROM transaction WHERE paydate >= '2021/01/01' and paydate <= '2021/01/31' and doornumber='$doornumber'";
+         $duesquery1 = "SELECT SUM(price) FROM transaction WHERE MONTH(paydate) = MONTH(CURRENT_DATE()) AND YEAR(paydate) = YEAR(CURRENT_DATE()) and doornumber='$doornumber'";
          $result2 = mysqli_query($con, $duesquery1);
          $row2 = mysqli_fetch_array($result2);
 
-         $duesquery2 = "SELECT SUM(price) FROM expense WHERE adddate >= '2021/01/01' and adddate <= '2021/01/31'";
+         $duesquery2 = "SELECT SUM(price) FROM expense WHERE MONTH(adddate) = MONTH(CURRENT_DATE()) AND YEAR(adddate) = YEAR(CURRENT_DATE())";
          $result3 = mysqli_query($con, $duesquery2);
          $row3 = mysqli_fetch_array($result3);
 
          $subs = $row1['dues'] - $row2[0];
+
+         
   ?>
 
 
@@ -36,7 +38,7 @@ include "../config.php";
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Daloglu Apartment - Tenant Page</title>
+        <title>Daloglu Apartment - Home Page</title>
         <link href="styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -79,7 +81,7 @@ include "../config.php";
                             </div>
                             <a class="nav-link" href="expenselist.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Expenses List
+                                Expense List
                             </a>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 
@@ -92,7 +94,7 @@ include "../config.php";
                             <div class="sb-sidenav-menu-heading">Neighbours</div>
                             <a class="nav-link" href="neighbours.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Neighbours List
+                                Neighbour List
                             </a>
                             <a class="nav-link" href="flathistory.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>

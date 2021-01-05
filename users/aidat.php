@@ -5,17 +5,25 @@
 include "checkuserlogin.php";
 include "../config.php";
 
-$errors = array(); 
+        $errors = array(); 
+        $doornumber = $_SESSION['doornumber'];
+        $monthquery2 = "SELECT dues FROM flat WHERE doornumber='$doornumber'";
+         $result3 = mysqli_query($con, $monthquery2);
+         $row3 = mysqli_fetch_array($result3);
+
+    
+    $userid = $_SESSION['id'];
 
     if (isset($_POST['but_submit'])) {
 
     $fname = mysqli_real_escape_string($con, $_POST['fname']);
     $lname = mysqli_real_escape_string($con, $_POST['lname']);
     $price = mysqli_real_escape_string($con, $_POST['price']);
-    $doornumber = $_SESSION['doornumber'];
-    $userid = $_SESSION['id'];
+  
+
     
     
+    if($price != $row3['dues']) { array_push($errors, "Price is not equal to your dues"); }
     if (empty($fname)) { array_push($errors, "First Name is required"); }
     if (empty($lname)) { array_push($errors, "Last Name is required");}
     if (empty($price)) { array_push($errors, "Price is required"); }
@@ -25,6 +33,7 @@ $errors = array();
         array_push($errors, "Please enter valid price");
     }
 
+    
 
     if (count($errors) == 0) {
     
@@ -32,7 +41,12 @@ $errors = array();
          $query = "INSERT INTO transaction (name, surname, price, doornumber, userid) 
               VALUES('$fname', '$lname', '$price', '$doornumber', '$userid')";
          mysqli_query($con, $query);
-         header("location: home.php");
+         
+
+         $query1 = "UPDATE flat SET payment = payment + '$price' WHERE doornumber = '$doornumber'";
+         mysqli_query($con, $query1);
+         
+         header("location: dueshistory.php");
   }
 }
 
@@ -46,7 +60,7 @@ $errors = array();
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Daloglu Apartment - Tenant Page</title>
+        <title>Daloglu Apartment - Dues Page</title>
         <link href="styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -89,20 +103,19 @@ $errors = array();
                             </div>
                             <a class="nav-link" href="expenselist.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Expenses List
+                                Expense List
                             </a>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Neighbours</div>
                             <a class="nav-link" href="neighbours.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Neighbours List
+                                Neighbour List
                             </a>
                             <a class="nav-link" href="flathistory.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
@@ -143,7 +156,7 @@ $errors = array();
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputUsername">Price</label>
-                                                <input class="form-control py-4" id="inputPrice" name="price" type="number" placeholder="Enter Price" />
+                                                <input class="form-control py-4" id="inputPrice" name="price" type="number" placeholder="Enter Price (<?php echo $row3['dues']; ?> TL)" />
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputUsername">Name On Card</label>

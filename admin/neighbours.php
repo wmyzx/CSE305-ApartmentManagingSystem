@@ -8,7 +8,7 @@ include "../config.php";
 
 	
 
-	$neigquery = "SELECT * FROM users ";
+	$neigquery = "SELECT * FROM users INNER JOIN flat ON users.doornumber = flat.doornumber WHERE users.status = 'active'";
   	$result = mysqli_query($con, $neigquery);
   	
   	
@@ -21,7 +21,7 @@ include "../config.php";
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Daloglu Apartment - Tenant Page</title>
+        <title>Daloglu Apartment - Resident List Page</title>
         <link href="styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -76,13 +76,13 @@ include "../config.php";
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Expenses
+                                Expense
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseExpenses" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="expenses.php">Expenses</a>
-                                    <a class="nav-link" href="expenselist.php">Expenses List</a>
+                                    <a class="nav-link" href="expenses.php">Expense</a>
+                                    <a class="nav-link" href="expenselist.php">Expense List</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -93,18 +93,22 @@ include "../config.php";
                                     
                                 </nav>
                             </div>
-                            <div class="sb-sidenav-menu-heading">Residents</div>
+                            <div class="sb-sidenav-menu-heading">Resident</div>
                             <a class="nav-link" href="neighbours.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Residents List
+                                Residents List(Active)
                             </a>
                             <a class="nav-link" href="addnewresident.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Add New Residents
+                                Add New Resident
                             </a>
                             <a class="nav-link" href="moveout.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Move Out Residents
+                                Move Out Resident
+                            </a>
+                            <a class="nav-link" href="neighboursall.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Residents List(All)
                             </a>
                             <a class="nav-link" href="uncollected.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
@@ -137,36 +141,34 @@ include "../config.php";
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>Door Number</th>
                                                 <th>Name</th>
                                                 <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
+                                                <th>Username</th>                                                
                                                 <th>Phone Number</th>
                                                 <th>E-mail</th>
                                                 <th>Register Date</th>
-                                                <th>Quit Date</th>
                                                 <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Dues</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
+                                                <th>Door Number</th>
                                                 <th>Name</th>
                                                 <th>Surname</th>
-                                                <th>Username</th>
-                                                <th>Door Number</th>
+                                                <th>Username</th>                                               
                                                 <th>Phone Number</th>
                                                 <th>E-mail</th>
-                                                <th>Register Date</th>
-                                                <th>Quit Date</th>
+                                                <th>Register Date</th>                                                
                                                 <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Dues</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         	<?php
                                         	while($row = mysqli_fetch_array($result)){   
-											echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>" . $row['doornumber'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $row['isadmin'] . "</td><td>" . $row['status'] . "</td></tr>";  
+											echo "<tr><td>" . $row['doornumber'] ."</td><td>". $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] ."</td><td>"   . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['isadmin']   . "</td><td>" . $row['dues']  . "</td></tr>";  
 											}
 											?>
                                             

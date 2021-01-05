@@ -56,6 +56,9 @@ if (isset($_POST['but_submit'])) {
               VALUES('$fname', '$lname', '$username', '$password', '$email', '$phonenumber', '$doornumber', 'active')";
     mysqli_query($con, $query);
     $_SESSION['username'] = $username;
+      echo '<script language="javascript">';
+      echo 'alert("You created your account successfully. Please log in")';
+      echo '</script>';
     header('location: login.php');
   }
 }
