@@ -22,7 +22,7 @@ include "../config.php";
 
             if ($user) { 
     if ($user['doornumber'] == $doornumber) {
-      array_push($errors, "Username already exists");
+      array_push($errors, "Doornumber already exists");
     }
 
   }
@@ -31,8 +31,8 @@ include "../config.php";
             if (count($errors) == 0) {
     
 
-            $query = "INSERT INTO flat (doornumber, floor, block) 
-              VALUES('$doornumber', '$floor', '$block')";
+            $query = "INSERT INTO flat (doornumber, floor, block, isfull) 
+              VALUES('$doornumber', '$floor', '$block', '0')";
              mysqli_query($con, $query);
              echo '<script language="javascript">';
              echo 'alert("You added new resident successfully.")';
@@ -100,6 +100,7 @@ include "../config.php";
                             </a>
                             <div class="collapse" id="collapseDues" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adddues.php">Add Monthly Dues</a>
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>

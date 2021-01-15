@@ -5,47 +5,37 @@
 include "checkadminlogin.php";
 include "../config.php";
 
-       
-    $errors = array(); 
-    $doornumber = $_SESSION['doornumber'];
-    $userid = $_SESSION['id'];
+        $errors = array();
+        $userid = $_SESSION['id'];
 
-    
-
+        if (isset($_POST['but_submit'])) {
+        $amount = mysqli_real_escape_string($con, $_POST['amount']);
+         $details = mysqli_real_escape_string($con, $_POST['details']);
+         $date = mysqli_real_escape_string($con, $_POST['date']);
          
-    if (isset($_POST['but_submit'])) {
-
-    $fname = mysqli_real_escape_string($con, $_POST['fname']);
-    $lname = mysqli_real_escape_string($con, $_POST['lname']);
-    $duesid = mysqli_real_escape_string($con, $_POST['duesid']);
-    
-    $monthquery2 = "SELECT amount FROM dues WHERE duesid='$duesid' ";
-         $result3 = mysqli_query($con, $monthquery2);
-         $row3 = mysqli_fetch_assoc($result3);
-
-    $price = $row3['amount'];
-    
-      
-    if (empty($fname)) { array_push($errors, "First Name is required"); }
-    if (empty($lname)) { array_push($errors, "Last Name is required");}
+             
+            if (empty($amount)) { array_push($errors, "Amount is required"); }
+            if (empty($date)) { array_push($errors, "Date is required");}
+           
    
 
+    if($amount <= 0) {
+        array_push($errors, "Please enter valid amount");
+    }
 
-    if (count($errors) == 0) {
+            if (count($errors) == 0) {
+                $query1 = "SELECT flatid FROM flat WHERE isfull = '1'";
+                    $result = mysqli_query($con, $query1);
+                    while($row = mysqli_fetch_array($result)){
+                        $flatid = $row['flatid'];
+                        
+                    $query2 = "INSERT INTO dues (flatid, amount, details, isactivedue, ddate, adminid) VALUES('$flatid', '$amount', '$details', '1', '$date', '$userid')";
+                    mysqli_query($con, $query2);
+            }
 
-
-         $query = "INSERT INTO transaction (name, surname, price, doornumber, userid, tduesid) 
-              VALUES('$fname', '$lname', '$price', '$doornumber', '$userid', '$duesid')";
-         mysqli_query($con, $query);
-         
-         $query1 = "UPDATE dues SET isactivedue = '0' WHERE duesid = '$duesid'";
-         mysqli_query($con, $query1);
-         
-         header("location: dueshistory.php");
-
-  }
-}
-       
+        }
+        }
+        
   ?>
 
 
@@ -58,7 +48,7 @@ include "../config.php";
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Daloglu Apartment - Dues Page</title>
+        <title>Daloglu Apartment - Admin Dues Page</title>
         <link href="styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -172,67 +162,21 @@ include "../config.php";
                                         <form method="post" action="">
                                             <?php include('errors.php'); ?>
                                             <div class="form-row">
-
-                                                <div class="col-md-6">
+                                                
                                                     <div class="form-group">
-                                                        <label class="small mb-1" for="inputFirstName">First Name</label>
-                                                        <input class="form-control py-4" id="inputFirstName" name="fname" type="text" placeholder="Enter First Name" />
+                                                        <label class="small mb-1" for="inputFirstName">Amount</label>
+                                                        <input class="form-control py-4" id="inputFirstName" name="amount" type="number" placeholder="Enter Amount" />
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="small mb-1" for="inputLastName">Last Name</label>
-                                                        <input class="form-control py-4" id="inputLastName" name="lname" type="text" placeholder="Enter Last Name" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <?php 
-                                            $query = "SELECT amount, ddate, duesid FROM dues WHERE flatid='$doornumber' AND isactivedue = '1' ORDER BY ddate ASC" ?>
-                                            <div class="form-group">
-                                                <label for="c-form-profession">
-                                               <span class="label-text">Select dues that you want to pay</span> 
-                                              <span class="contact-error"></span>
-                                              </label>
-                                              <select name="duesid" class="c-form-profession form-control" id="c-form-profession">
-                                          <?php
-                                            $result = mysqli_query($con, $query);
-
-                                            while($row = mysqli_fetch_array($result)){   
-                                                     $amount = $row['amount'];
-                                                     $date   = $row['ddate'];
-                                                     $id = $row['duesid'];
-                                                     $originalDate = $date;
-                                                     $newDate = date("F-Y", strtotime($originalDate)); 
-
-                                                      echo '<option value="'.$id.'">'.$newDate.'  '.$amount.' TL </option>';
-                                                    
-                                            }
-                                            ?>
-                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label class="small mb-1" for="inputUsername">Name On Card</label>
-                                                <input class="form-control py-4" id="inputPrice" name="cardname" type="text" placeholder="Enter Name On Card" />
+                                                <label class="small mb-1" for="inputUsername">Details</label>
+                                                <input class="form-control py-4" id="inputPrice" name="details" type="text" placeholder="Enter Details"/>
                                             </div>
                                             <div class="form-group">
-                                                <label class="small mb-1" for="inputUsername">Card Number</label>
-                                                <input class="form-control py-4" id="inputPrice" name="cardnumber" type="number" placeholder="Enter Card Number" />
+                                                <label class="small mb-1" for="inputUsername">Date</label>
+                                                <input class="form-control py-4" id="inputPrice" name="date" type="date" placeholder="Enter Date" />
                                             </div>
-                                            <div class="form-row">
-                                            <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="small mb-1" for="inputFirstName">Expiry Date</label>
-                                                        <input class="form-control py-4" id="inputFirstName" name="expdate" type="month" placeholder="Expiry Date (MM/YY)" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="small mb-1" for="inputLastName">CCV</label>
-                                                        <input class="form-control py-4" id="inputLastName" name="ccv" type="text" placeholder="CCV" />
-                                                    </div>
-                                                </div>
-
-                                            <input type="submit" class="btn btn-primary btn-block" value="Pay Now" name="but_submit" id="but_submit" href="login.php"/>
+                                             <input type="submit" class="btn btn-primary btn-block" value="Add Dues" name="but_submit" id="but_submit"/>
                                     
                                         </form>
                                     </div>
@@ -259,8 +203,5 @@ include "../config.php";
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-demo.js"></script>
     </body>
 </html>

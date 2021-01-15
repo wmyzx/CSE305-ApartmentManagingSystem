@@ -8,22 +8,27 @@ include "../config.php";
         $duesquery = "SELECT SUM(price) FROM transaction WHERE MONTH(paydate) = MONTH(CURRENT_DATE()) AND YEAR(paydate) = YEAR(CURRENT_DATE())";
          $result = mysqli_query($con, $duesquery);
          $row = mysqli_fetch_array($result);
+
+         $duesquery22 = "SELECT SUM(amount) FROM dues WHERE MONTH(ddate) = MONTH(CURRENT_DATE()) AND YEAR(ddate) = YEAR(CURRENT_DATE()) AND isactivedue = '0'";
+         $result22 = mysqli_query($con, $duesquery22);
+         $row22 = mysqli_fetch_array($result22);
          
-         $monthquery = "SELECT SUM(dues) FROM flat ";
+         $monthquery = "SELECT SUM(amount) FROM dues WHERE MONTH(ddate) = MONTH(CURRENT_DATE()) AND YEAR(ddate) = YEAR(CURRENT_DATE()) ";
          $result1 = mysqli_query($con, $monthquery);
          $row1 = mysqli_fetch_array($result1);
          
     
 
-         $subs = $row1[0] - $row[0];
+         $subs = $row1[0] - $row22[0];
          
+         $userid = $_SESSION['id'];
          $doornumber = $_SESSION['doornumber'];
-
-         $monthquery2 = "SELECT dues FROM flat WHERE doornumber='$doornumber'";
+         
+         $monthquery2 = "SELECT amount FROM dues WHERE flatid='$doornumber' AND MONTH(ddate) = MONTH(CURRENT_DATE()) AND YEAR(ddate) = YEAR(CURRENT_DATE())";
          $result3 = mysqli_query($con, $monthquery2);
          $row3 = mysqli_fetch_array($result3);
          
-         $duesquery3 = "SELECT SUM(price) FROM expense WHERE MONTH(adddate) = MONTH(CURRENT_DATE()) AND YEAR(adddate) = YEAR(CURRENT_DATE())";
+         $duesquery3 = "SELECT SUM(price) FROM expense WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
          $result4 = mysqli_query($con, $duesquery3);
          $row4 = mysqli_fetch_array($result4);
   ?>
@@ -86,6 +91,7 @@ include "../config.php";
                             </a>
                             <div class="collapse" id="collapseDues" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="adddues.php">Add Monthly Dues</a>
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>

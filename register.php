@@ -42,7 +42,7 @@ if (isset($_POST['but_submit'])) {
     if ($user['email'] == $email) {
       array_push($errors, "Email already exists");
     }
-    if ($user['doornumber'] == $doornumber && $user['status'] == 'active') {
+    if ($user['doornumber'] == $doornumber && $user['isactive'] == '1') {
       array_push($errors, "Door number already exists");
     }
 
@@ -52,9 +52,23 @@ if (isset($_POST['but_submit'])) {
   if (count($errors) == 0) {
     $password = md5($password_1);
 
-    $query = "INSERT INTO users (firstname, lastname, loginname, pwd, email, phonenumber, doornumber, status) 
-              VALUES('$fname', '$lname', '$username', '$password', '$email', '$phonenumber', '$doornumber', 'active')";
+    $query = "INSERT INTO users (firstname, lastname, loginname, pwd, email, phonenumber, doornumber, isadmin, isactive) 
+              VALUES('$fname', '$lname', '$username', '$password', '$email', '$phonenumber', '$doornumber', '0', '1')";
     mysqli_query($con, $query);
+
+    $query1 = "SELECT userid FROM users WHERE loginname='$username'";
+    $result1 = mysqli_query($con, $query1);
+    $user1 = mysqli_fetch_assoc($result1);
+    $userid = $user1['userid'];
+
+
+
+
+    $query2 = "UPDATE flat SET auserid = '$userid', isfull = '1' WHERE doornumber = '$doornumber'";
+    mysqli_query($con, $query2);
+
+    
+
     $_SESSION['username'] = $username;
       echo '<script language="javascript">';
       echo 'alert("You created your account successfully. Please log in")';
@@ -117,7 +131,7 @@ if (isset($_POST['but_submit'])) {
                                                 <input class="form-control py-4" id="inputPhoneNumber" name="phonenumber" type="text" placeholder="Enter Phone Number" />
                                             </div>
                                             <?php 
-                                            $query = "SELECT doornumber FROM flat ORDER BY doornumber ASC" ?>
+                                            $query = "SELECT doornumber, isfull FROM flat ORDER BY doornumber ASC" ?>
                                             <div class="form-group">
                                                 <label for="c-form-profession">
                                                <span class="label-text">Door number</span> 
@@ -126,11 +140,14 @@ if (isset($_POST['but_submit'])) {
                                               <select name="doornumber" class="c-form-profession form-control" id="c-form-profession">
                                           <?php
                                             $result = mysqli_query($con, $query);
+
                                             while($row = mysqli_fetch_array($result)){   
                                                     unset($id, $name);
-                                                    $id = $row['id'];
-                                                     $doornumber = $row['doornumber']; 
+                                                    $id = $row['isfull'];
+                                                     $doornumber = $row['doornumber'];
+                                                     if($id == '0') {
                                                       echo '<option value="'.$doornumber.'">'.$doornumber.'</option>';
+                                                    }
                                             }
                                             ?>
                                  </select>

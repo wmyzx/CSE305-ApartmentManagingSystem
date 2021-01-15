@@ -42,14 +42,14 @@ if(isset($_POST['but_submit']))
         $isadmin = $row1['isadmin'];
         $name = $row1['firstname'];
         $lastname = $row1['lastname'];
-        $active = $row1['status'];
+        $active = $row1['isactive'];
         
 
         $_SESSION['isadmin']=$isadmin;
         $_SESSION['name']=$row1['firstname'];
         $_SESSION['lastname']=$lastname;
-        $_SESSION['id']=$row1['id'];
-        $_SESSION['doornumber']=$row1[7];
+        $_SESSION['id']=$row1['userid'];
+        $_SESSION['doornumber']=$row1['doornumber'];
 
         $doornumber = $_SESSION['doornumber'];
 
@@ -60,7 +60,7 @@ if(isset($_POST['but_submit']))
                 header("location: admin/home.php");
                 exit();
                 }   
-             else if($isadmin == '0' && $active == 'active')
+             else if($isadmin == '0' && $active == '1')
              {
                 header("location: users/home.php");
                 exit();
