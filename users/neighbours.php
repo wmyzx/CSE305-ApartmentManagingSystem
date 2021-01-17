@@ -8,7 +8,7 @@ include "../config.php";
 
 	
 
-	$neigquery = "SELECT * FROM users WHERE isadmin='0' and status='active'";
+	$neigquery = "SELECT * FROM users WHERE isactive='1'";
   	$result = mysqli_query($con, $neigquery);
   	
   	
@@ -60,6 +60,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link" href="expenselist.php">
@@ -109,28 +110,33 @@ include "../config.php";
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>Door Number</th>
                                                 <th>Name</th>
                                                 <th>Surname</th>
-                                                <th>Door Number</th>
                                                 <th>Phone Number</th>
                                                 <th>E-mail</th>
-                                                
+                                                <th>Is Admin</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
+                                                <th>Door Number</th>
                                                 <th>Name</th>
                                                 <th>Surname</th>
-                                                <th>Door Number</th>
                                                 <th>Phone Number</th>
                                                 <th>E-mail</th>
-                                                
+                                                <th>Is Admin</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         	<?php
-                                        	while($row = mysqli_fetch_array($result)){   //Creates a loop to loop through results
-											echo "<tr><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['doornumber'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td></tr>";  //$row['index'] the index here is a field name
+                                        	while($row = mysqli_fetch_array($result)){ 
+                                                if($row['isadmin'] == '1'){
+                                                    $ispaid = "Yes";
+                                                } else {
+                                                    $ispaid = "No";
+                                                }
+											echo "<tr><td>" . $row['doornumber'] . "</td><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] ."</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $ispaid . "</td></tr>";  //$row['index'] the index here is a field name
 											}
 											?>
                                             

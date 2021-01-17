@@ -5,7 +5,7 @@
 include "checkadminlogin.php";
 include "../config.php";
 
-        $movequery = "SELECT id, doornumber FROM users WHERE status='active'  ORDER BY doornumber ASC ";
+        $movequery = "SELECT userid, doornumber FROM users WHERE isactive='1'  ORDER BY doornumber ASC ";
          $result = mysqli_query($con, $movequery);
          
          
@@ -14,8 +14,10 @@ include "../config.php";
 
             $selectOption = $_POST['moveout'];
             
-            $updatequery = "UPDATE users SET quit_date = CURRENT_TIMESTAMP, status = 'inactive' WHERE id='$selectOption'";
+            $updatequery = "UPDATE users SET quit_date = CURRENT_TIMESTAMP, isactive = '0' WHERE userid='$selectOption'";
             mysqli_query($con, $updatequery);
+            $updatequery1 = "UPDATE flat SET isfull = '0', auserid = NULL WHERE auserid='$selectOption'";
+            mysqli_query($con, $updatequery1);
             header('location: home.php');
 
          }
@@ -61,6 +63,10 @@ include "../config.php";
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Main Page
                             </a>
+                             <a class="nav-link" href="announcement.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Announcement
+                            </a>
                             <div class="sb-sidenav-menu-heading">Payment</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues1" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -71,6 +77,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistoryadmin.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistoryadmin.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues" aria-expanded="false" aria-controls="collapseLayouts">
@@ -84,6 +91,7 @@ include "../config.php";
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
@@ -154,7 +162,7 @@ include "../config.php";
                                     <?php
                                             while($row = mysqli_fetch_array($result)){   
                                                     unset($id, $name);
-                                                    $id = $row['id'];
+                                                    $id = $row['userid'];
                                                      $doornumber = $row['doornumber']; 
                                                       echo '<option value="'.$id.'">'.$doornumber.'</option>';
                                             }

@@ -5,48 +5,44 @@
 include "checkuserlogin.php";
 include "../config.php";
 
-        $errors = array(); 
-        $doornumber = $_SESSION['doornumber'];
-        $monthquery2 = "SELECT dues FROM flat WHERE doornumber='$doornumber'";
-         $result3 = mysqli_query($con, $monthquery2);
-         $row3 = mysqli_fetch_array($result3);
-
-    
+            
+    $errors = array(); 
+    $doornumber = $_SESSION['doornumber'];
     $userid = $_SESSION['id'];
 
+    
+
+         
     if (isset($_POST['but_submit'])) {
 
     $fname = mysqli_real_escape_string($con, $_POST['fname']);
     $lname = mysqli_real_escape_string($con, $_POST['lname']);
-    $price = mysqli_real_escape_string($con, $_POST['price']);
-  
+    $duesid = mysqli_real_escape_string($con, $_POST['duesid']);
+    
+    $monthquery2 = "SELECT amount FROM dues WHERE duesid='$duesid' ";
+         $result3 = mysqli_query($con, $monthquery2);
+         $row3 = mysqli_fetch_assoc($result3);
 
+    $price = $row3['amount'];
     
-    
-    if($price != $row3['dues']) { array_push($errors, "Price is not equal to your dues"); }
+      
     if (empty($fname)) { array_push($errors, "First Name is required"); }
     if (empty($lname)) { array_push($errors, "Last Name is required");}
-    if (empty($price)) { array_push($errors, "Price is required"); }
    
 
-    if($price <= 0) {
-        array_push($errors, "Please enter valid price");
-    }
-
-    
 
     if (count($errors) == 0) {
-    
 
-         $query = "INSERT INTO transaction (name, surname, price, doornumber, userid) 
-              VALUES('$fname', '$lname', '$price', '$doornumber', '$userid')";
+
+         $query = "INSERT INTO transaction (name, surname, price, doornumber, userid, tduesid) 
+              VALUES('$fname', '$lname', '$price', '$doornumber', '$userid', '$duesid')";
          mysqli_query($con, $query);
          
-
-         $query1 = "UPDATE flat SET payment = payment + '$price' WHERE doornumber = '$doornumber'";
+         $query1 = "UPDATE dues SET isactivedue = '0' WHERE duesid = '$duesid'";
          mysqli_query($con, $query1);
          
          header("location: dueshistory.php");
+
   }
 }
 
@@ -99,6 +95,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link" href="expenselist.php">
@@ -132,11 +129,13 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
-                	 <div class="container">
+                	  <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Pay Your Dues</h3></div>
                                     <div class="card-body">
+                                        <form method="post" action="">
                                         <form method="post" action="">
                                             <?php include('errors.php'); ?>
                                             <div class="form-row">
@@ -154,9 +153,29 @@ include "../config.php";
                                                     </div>
                                                 </div>
                                             </div>
+                                            <?php 
+                                            $query = "SELECT amount, ddate, duesid FROM dues WHERE flatid='$doornumber' AND isactivedue = '1' ORDER BY ddate ASC" ?>
                                             <div class="form-group">
-                                                <label class="small mb-1" for="inputUsername">Price</label>
-                                                <input class="form-control py-4" id="inputPrice" name="price" type="number" placeholder="Enter Price (<?php echo $row3['dues']; ?> TL)" />
+                                                <label for="c-form-profession">
+                                               <span class="label-text">Select dues that you want to pay</span> 
+                                              <span class="contact-error"></span>
+                                              </label>
+                                              <select name="duesid" class="c-form-profession form-control" id="c-form-profession">
+                                          <?php
+                                            $result = mysqli_query($con, $query);
+
+                                            while($row = mysqli_fetch_array($result)){   
+                                                     $amount = $row['amount'];
+                                                     $date   = $row['ddate'];
+                                                     $id = $row['duesid'];
+                                                     $originalDate = $date;
+                                                     $newDate = date("F-Y", strtotime($originalDate)); 
+
+                                                      echo '<option value="'.$id.'">'.$newDate.'  '.$amount.' TL </option>';
+                                                    
+                                            }
+                                            ?>
+                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputUsername">Name On Card</label>
@@ -189,9 +208,6 @@ include "../config.php";
                             </div>
                         </div>
                     </div>
-
-
-
 
                     
                 </main>

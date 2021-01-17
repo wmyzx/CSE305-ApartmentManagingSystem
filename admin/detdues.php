@@ -9,14 +9,26 @@ include "../config.php";
          $movequery = "SELECT block FROM flat GROUP BY block  ";
          $result = mysqli_query($con, $movequery);
 
+         $movequery2 = "SELECT ddate FROM dues WHERE isactivedue = '1' GROUP BY ddate  ";
+         $result2 = mysqli_query($con, $movequery2);
+
 
          if (isset($_POST['but_submit'])) {
 
             $selectOption = $_POST['block'];
             $rate = $_POST['rate'];
+            $ddate1 = $_POST['ddate'];
             
-            $updatequery = "UPDATE flat SET dues = CONVERT(dues * ".(1+$rate/100).",UNSIGNED) WHERE block='$selectOption'";
-            mysqli_query($con, $updatequery);
+
+            $movequery1 = "SELECT flatid FROM flat WHERE block ='$selectOption'";
+            $result1 = mysqli_query($con, $movequery1);
+            while($row = mysqli_fetch_array($result1)){
+
+            $updatequery = "UPDATE dues SET amount = amount + (amount * '$rate')/100 WHERE flatid='$row[0]'  AND isactivedue = '1' AND ddate = '$ddate1' ";
+
+            $result3 = mysqli_query($con, $updatequery);
+            }
+        
             header('location: home.php');
 
          }
@@ -63,6 +75,10 @@ include "../config.php";
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Main Page
                             </a>
+                             <a class="nav-link" href="announcement.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Announcement
+                            </a>
                             <div class="sb-sidenav-menu-heading">Payment</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues1" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -73,6 +89,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistoryadmin.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistoryadmin.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues" aria-expanded="false" aria-controls="collapseLayouts">
@@ -86,6 +103,7 @@ include "../config.php";
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
@@ -164,6 +182,22 @@ include "../config.php";
                                                 $block = $row['block'];
                                                 
                                                 echo '<option value="'.$block.'">'.$block.'</option>';
+                                            }
+                                            ?>
+                                 </select>
+                            </div>
+                            <div class="form-group">
+                                     <label for="c-form-profession">
+                                         <span class="label-text">Select a Dues</span> 
+                                         <span class="contact-error"></span>
+                                     </label>
+                                 <select name="ddate" class="c-form-profession form-control" id="c-form-profession">
+                                    <?php
+                                            while($row2 = mysqli_fetch_array($result2)){   
+                                                
+                                                $ddate = $row2['ddate'];
+                                                
+                                                echo '<option value="'.$ddate.'">'.$ddate.'</option>';
                                             }
                                             ?>
                                  </select>

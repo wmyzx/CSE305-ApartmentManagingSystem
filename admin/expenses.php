@@ -5,17 +5,20 @@
 include "checkadminlogin.php";
 include "../config.php";
 
-    $errors = array(); 
+    $errors = array();
+    $userid = $_SESSION['id']; 
 
     if (isset($_POST['but_submit'])) {
         
         $name = mysqli_real_escape_string($con, $_POST['name']);
         $price = mysqli_real_escape_string($con, $_POST['price']);
         $details = mysqli_real_escape_string($con, $_POST['details']);
+        $date = mysqli_real_escape_string($con, $_POST['date']);
 
         if (empty($name)) { array_push($errors, "Name is required"); }
         if (empty($price)) { array_push($errors, "Price is required");}
         if (empty($details)) { array_push($errors, "Details is required"); }
+        if (empty($date)) { array_push($errors, "Date is required"); }
 
          if($price <= 0) {
         array_push($errors, "Please enter valid price");
@@ -24,8 +27,8 @@ include "../config.php";
     if (count($errors) == 0) {
         
 
-         $query = "INSERT INTO expense (name, price, details) 
-              VALUES('$name', '$price', '$details')";
+         $query = "INSERT INTO expanse (name, price, details, adminid, date) 
+              VALUES('$name', '$price', '$details', '$userid', '$date')";
          mysqli_query($con, $query);
          
          }
@@ -71,6 +74,10 @@ include "../config.php";
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Main Page
                             </a>
+                             <a class="nav-link" href="announcement.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Announcement
+                            </a>
                             <div class="sb-sidenav-menu-heading">Payment</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues1" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -81,6 +88,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistoryadmin.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistoryadmin.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues" aria-expanded="false" aria-controls="collapseLayouts">
@@ -94,6 +102,7 @@ include "../config.php";
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
@@ -152,7 +161,9 @@ include "../config.php";
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Add Expense</h3></div>
                                     <div class="card-body">
+                                        <form method="post" action="">
                                         <form method="post" action="" id="form1">
                                             <?php include('errors.php'); ?>
                                              <div class="form-group">
@@ -168,6 +179,11 @@ include "../config.php";
                                             <label class="small mb-1" for="inputUsername">Details</label>
                                             <textarea  class="form-control" name="details" id="form1" rows="5" placeholder="Enter Details"></textarea>
                                             </div>
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputUsername">Date</label>
+                                                <input class="form-control py-4" id="inputPrice" name="date" type="date" placeholder="Enter Price" />
+                                            </div>
+
                                             <input type="submit" class="btn btn-primary btn-block" value="Confirm" name="but_submit" id="but_submit"/>
                                     
                                         </form>

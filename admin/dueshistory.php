@@ -8,8 +8,10 @@ include "../config.php";
         
     
 
-    $duesquery = "SELECT doornumber, userid, name, surname, price, paydate FROM transaction ";
-    $result = mysqli_query($con, $duesquery);
+    
+
+    $duesquery1 = "SELECT * FROM dues ORDER BY ddate";
+    $result1 = mysqli_query($con, $duesquery1);
   ?>
 
 
@@ -51,6 +53,10 @@ include "../config.php";
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Main Page
                             </a>
+                             <a class="nav-link" href="announcement.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Announcement
+                            </a>
                             <div class="sb-sidenav-menu-heading">Payment</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues1" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -61,6 +67,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistoryadmin.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistoryadmin.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues" aria-expanded="false" aria-controls="collapseLayouts">
@@ -74,6 +81,7 @@ include "../config.php";
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
@@ -128,10 +136,10 @@ include "../config.php";
 
             <div id="layoutSidenav_content">
                 <main>
+                    
+
                     <div class="container-fluid">
                         <h1 class="mt-4">Dues History</h1>
-                        
-                        
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
@@ -142,28 +150,33 @@ include "../config.php";
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Surname</th>
                                                 <th>Door Number</th>
-                                                <th>Price</th>
-                                                <th>Pay Date</th>
-                                                
+                                                <th>Amount</th>
+                                                <th>Details</th>
+                                                <th>Is Paid</th>
+                                                <th>Dues Date</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Surname</th>
                                                 <th>Door Number</th>
-                                                <th>Price</th>
-                                                <th>Pay Date</th>
-                                                
+                                                <th>Amount</th>
+                                                <th>Details</th>
+                                                <th>Is Paid</th>
+                                                <th>Dues Date</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                             <?php
-                                            while($row = mysqli_fetch_array($result)){   //Creates a loop to loop through results
-                                            echo "<tr><td>" . $row['name'] . "</td><td>" . $row['surname'] . "</td><td>" . $row['doornumber'] ."</td><td>" . $row['price'] . "</td><td>" . $row['paydate'] . "</td></tr>";  //$row['index'] the index here is a field name
+                                            while($row1 = mysqli_fetch_array($result1)){
+                                                if($row1['isactivedue'] == '1'){
+                                                    $ispaid = "No";
+                                                } else {
+                                                    $ispaid = "Yes";
+                                                }
+
+                                            echo "<tr><td>" . $row1['flatid'] . "</td><td>" . $row1['amount'] . "</td><td>" . $row1['details'] ."</td><td>" . $ispaid . "</td><td>" 
+                                             . $row1['ddate']. "</td></tr>";  //$row['index'] the index here is a field name
                                             }
                                             ?>
                                             

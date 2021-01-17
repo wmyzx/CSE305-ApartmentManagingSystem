@@ -8,7 +8,7 @@ include "../config.php";
 
 	
 
-	$neigquery = "SELECT * FROM users ";
+	$neigquery = "SELECT * FROM users INNER JOIN flat ON users.doornumber = flat.flatid INNER JOIN dues ON flat.flatid = dues.flatid GROUP BY users.doornumber";
   	$result = mysqli_query($con, $neigquery);
   	
   	
@@ -50,6 +50,10 @@ include "../config.php";
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Main Page
                             </a>
+                             <a class="nav-link" href="announcement.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Announcement
+                            </a>
                             <div class="sb-sidenav-menu-heading">Payment</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues1" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -60,6 +64,8 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistoryadmin.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistoryadmin.php">Payment History</a>
+
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues" aria-expanded="false" aria-controls="collapseLayouts">
@@ -73,6 +79,7 @@ include "../config.php";
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
@@ -150,8 +157,9 @@ include "../config.php";
                                                 <th>E-mail</th>
                                                 <th>Register Date</th>
                                                 <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Is Admin</th>
+                                                <th>Is Active</th>
+                                                
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -164,14 +172,27 @@ include "../config.php";
                                                 <th>E-mail</th>
                                                 <th>Register Date</th>
                                                 <th>Quit Date</th>
-                                                <th>isAdmin</th>
-                                                <th>Status</th>
+                                                <th>Is Admin</th>
+                                                <th>Is Active</th>
+                                                
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         	<?php
-                                        	while($row = mysqli_fetch_array($result)){   
-											echo "<tr><td>" . $row['doornumber'] . "</td><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] . "</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $row['isadmin'] . "</td><td>" . $row['status'] . "</td></tr>";  
+                                        	while($row = mysqli_fetch_array($result)){  
+
+                                            if($row['isadmin'] == '1'){
+                                                    $ispaid = "Yes";
+                                                } else {
+                                                    $ispaid = "No";
+                                                }
+                                                if($row['isactive'] == '1'){
+                                                    $ispaid1 = "Yes";
+                                                } else {
+                                                    $ispaid1 = "No";
+                                                }
+
+											echo "<tr><td>" . $row['doornumber'] . "</td><td>" . $row['firstname'] . "</td><td>" . $row['lastname'] . "</td><td>" . $row['loginname'] . "</td><td>" . $row['phonenumber'] . "</td><td>" . $row['email'] . "</td><td>" . $row['reg_date'] . "</td><td>" . $row['quit_date'] . "</td><td>". $ispaid . "</td><td>" . $ispaid1 .  "</td></tr>";  
 											}
 											?>
                                             

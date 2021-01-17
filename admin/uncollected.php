@@ -6,22 +6,8 @@ include "checkadminlogin.php";
 include "../config.php";
 
             
-        $duesquery = "SELECT * FROM flat";
-        $result = mysqli_query($con, $duesquery);
-        $doornumber = array();
-        $result1= array();
-        while($row1 = mysqli_fetch_array($result)){           
-            $subs = $row1[4] - $row1[5];
-            
-        
-            if($subs > 0) {
-                 
-        }
-        }
-        
-        
-            $duesquery1 = "SELECT * FROM users INNER JOIN flat ON users.doornumber = flat.doornumber where id NOT IN (select userid from transaction WHERE paydate >= '2021/01/01' and paydate <= '2021/01/31') AND status = 'active' ORDER BY users.doornumber ASC ";
-            $result1 = mysqli_query($con, $duesquery1);
+        $neigquery = "SELECT *, SUM(amount) FROM users INNER JOIN flat ON users.doornumber = flat.flatid INNER JOIN dues ON flat.flatid = dues.flatid WHERE users.isactive = '1' AND dues.isactivedue = '1' GROUP BY users.doornumber";
+        $result = mysqli_query($con, $neigquery);
             
             
   ?>
@@ -65,6 +51,10 @@ include "../config.php";
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Main Page
                             </a>
+                             <a class="nav-link" href="announcement.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Announcement
+                            </a>
                             <div class="sb-sidenav-menu-heading">Payment</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues1" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -75,6 +65,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistoryadmin.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistoryadmin.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues" aria-expanded="false" aria-controls="collapseLayouts">
@@ -88,6 +79,7 @@ include "../config.php";
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
@@ -154,26 +146,31 @@ include "../config.php";
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>Door Number</th>
                                                 <th>Name</th>
                                                 <th>Surname</th>
                                                 <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Dues</th>
+                                                <th>Floor</th>
+                                                <th>Block</th>
+                                                <th>Debt</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
+                                                <th>Door Number</th>
                                                 <th>Name</th>
                                                 <th>Surname</th>
                                                 <th>Username</th>
-                                                <th>Door Number</th>
-                                                <th>Dues</th>
+                                                <th>Floor</th>
+                                                <th>Block</th>
+                                                <th>Debt</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                             <?php
-                                            while($row3 = mysqli_fetch_array($result1)){ 
-                                            echo "<tr><td>" . $row3['firstname'] . "</td><td>" . $row3['lastname'] . "</td><td>" . $row3['loginname'] ."</td><td>" . $row3['doornumber'] . "</td><td>" . $row3['dues']  . "</td></tr>";  
+                                            while($row3 = mysqli_fetch_array($result)){ 
+                                                
+                                            echo "<tr><td>"  . $row3['doornumber'] . "</td><td>" . $row3['firstname'] . "</td><td>" . $row3['lastname'] . "</td><td>" . $row3['loginname'] ."</td><td>"   . $row3['floor']  . "</td><td>" . $row3['block'] . "</td><td>" . $row3['SUM(amount)'] . "</td></tr>";  
                                             }
 
                                             ?>

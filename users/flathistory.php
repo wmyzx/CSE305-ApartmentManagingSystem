@@ -9,7 +9,7 @@ include "../config.php";
 	
     $doornumber = $_SESSION['doornumber'];
 
-	$neigquery = "SELECT * FROM users WHERE doornumber='$doornumber' and status='inactive'";
+	$neigquery = "SELECT * FROM users WHERE doornumber='$doornumber' and isactive='0'";
   	$result = mysqli_query($con, $neigquery);
   	
   	
@@ -61,6 +61,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link" href="expenselist.php">

@@ -5,6 +5,8 @@
 include "checkadminlogin.php";
 include "../config.php";
 
+        $errors = array();
+
         $duesquery = "SELECT SUM(price) FROM transaction WHERE MONTH(paydate) = MONTH(CURRENT_DATE()) AND YEAR(paydate) = YEAR(CURRENT_DATE())";
          $result = mysqli_query($con, $duesquery);
          $row = mysqli_fetch_array($result);
@@ -28,9 +30,18 @@ include "../config.php";
          $result3 = mysqli_query($con, $monthquery2);
          $row3 = mysqli_fetch_array($result3);
          
-         $duesquery3 = "SELECT SUM(price) FROM expense WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
+         $duesquery3 = "SELECT SUM(price) FROM expanse WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
          $result4 = mysqli_query($con, $duesquery3);
          $row4 = mysqli_fetch_array($result4);
+
+
+         $exquery = "SELECT * FROM announcement WHERE isactive = '1'";
+        $result21 = mysqli_query($con, $exquery);
+
+
+        
+     
+
   ?>
 
 
@@ -72,6 +83,10 @@ include "../config.php";
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Main Page
                             </a>
+                            <a class="nav-link" href="announcement.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Announcement
+                            </a>
                             <div class="sb-sidenav-menu-heading">Payment</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues1" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -82,6 +97,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistoryadmin.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistoryadmin.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDues" aria-expanded="false" aria-controls="collapseLayouts">
@@ -95,6 +111,7 @@ include "../config.php";
                                     <a class="nav-link" href="detduesdoornumber.php">Determine Dues(Door Number)</a>
                                     <a class="nav-link" href="detdues.php">Determine Dues(Block)</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
@@ -215,11 +232,37 @@ include "../config.php";
                             </div>
                         </div>
                         
+
                     <div class="container-fluid">
                         <h1 class="mt-4">Announcement</h1>
+                        
+                        
                         <div class="card mb-4">
+                        
                             <div class="card-body">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Announcement</th>       
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Announcement</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                            <?php
+                                            while($row21 = mysqli_fetch_array($result21)){   
+                                            echo "<tr><td>" . $row21['date'] . "</td><td>" . $row21['annodetail']  . "</td></tr>";  
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

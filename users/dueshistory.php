@@ -7,9 +7,12 @@ include "checkuserlogin.php";
 include "../config.php";
 
 	$id = $_SESSION['id'];
+    $flatid = $_SESSION['doornumber'];
 
-	$duesquery = "SELECT doornumber, userid, name, surname, price, paydate FROM transaction WHERE userid='$id'";
-  	$result = mysqli_query($con, $duesquery);
+    
+
+    $duesquery1 = "SELECT * FROM dues WHERE flatid='$flatid' ORDER BY ddate";
+    $result1 = mysqli_query($con, $duesquery1);
   	
   	
 ?>
@@ -60,6 +63,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link" href="expenselist.php">
@@ -107,30 +111,35 @@ include "../config.php";
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Surname</th>
                                                 <th>Door Number</th>
-                                                <th>Price</th>
-                                                <th>Pay Date</th>
-                                                
+                                                <th>Amount</th>
+                                                <th>Details</th>
+                                                <th>Is Paid</th>
+                                                <th>Dues Date</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Surname</th>
                                                 <th>Door Number</th>
-                                                <th>Price</th>
-                                                <th>Pay Date</th>
-                                                
+                                                <th>Amount</th>
+                                                <th>Details</th>
+                                                <th>Is Paid</th>
+                                                <th>Dues Date</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                        	<?php
-                                        	while($row = mysqli_fetch_array($result)){   //Creates a loop to loop through results
-											echo "<tr><td>" . $row['name'] . "</td><td>" . $row['surname'] . "</td><td>" . $row['doornumber'] ."</td><td>" . $row['price'] . "</td><td>" . $row['paydate'] . "</td></tr>";  //$row['index'] the index here is a field name
-											}
-											?>
+                                            <?php
+                                            while($row1 = mysqli_fetch_array($result1)){
+                                                if($row1['isactivedue'] == '1'){
+                                                    $ispaid = "No";
+                                                } else {
+                                                    $ispaid = "Yes";
+                                                }
+
+                                            echo "<tr><td>" . $row1['flatid'] . "</td><td>" . $row1['amount'] . "</td><td>" . $row1['details'] ."</td><td>" . $ispaid . "</td><td>" 
+                                             . $row1['ddate']. "</td></tr>";  //$row['index'] the index here is a field name
+                                            }
+                                            ?>
                                             
                                           
                                         </tbody>
@@ -139,7 +148,6 @@ include "../config.php";
                             </div>
                         </div>
                     </div>
-
 
                     
                 </main>

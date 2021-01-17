@@ -5,7 +5,7 @@
 include "checkuserlogin.php";
 include "../config.php";
 
-    $exquery = "SELECT * FROM expense ";
+    $exquery = "SELECT * FROM expanse ";
     $result = mysqli_query($con, $exquery);
 
 
@@ -58,6 +58,7 @@ include "../config.php";
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="aidat.php">Dues</a>
                                     <a class="nav-link" href="dueshistory.php">Dues History</a>
+                                    <a class="nav-link" href="paymenthistory.php">Payment History</a>
                                 </nav>
                             </div>
                             <a class="nav-link" href="expenselist.php">
@@ -124,7 +125,7 @@ include "../config.php";
                                         <tbody>
                                             <?php
                                             while($row = mysqli_fetch_array($result)){   
-                                            echo "<tr><td>" . $row['name'] . "</td><td>" . $row['price'] . "</td><td>" . $row['adddate'] ."</td><td>" . $row['details'] . "</td></tr>";  
+                                            echo "<tr><td>" . $row['name'] . "</td><td>" . $row['price'] . "</td><td>" . $row['date'] ."</td><td>" . $row['details'] . "</td></tr>";  
                                             }
                                             ?>
                                             
@@ -135,7 +136,6 @@ include "../config.php";
                             </div>
                         </div>
                     </div>
-
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
@@ -154,5 +154,8 @@ include "../config.php";
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-demo.js"></script>
     </body>
 </html>
