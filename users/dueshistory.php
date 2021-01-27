@@ -11,7 +11,7 @@ include "../config.php";
 
     
 
-    $duesquery1 = "SELECT * FROM dues WHERE flatid='$flatid' ORDER BY ddate";
+    $duesquery1 = "SELECT * FROM dues WHERE auserid='$id' AND flatid = '$flatid' ORDER BY ddate";
     $result1 = mysqli_query($con, $duesquery1);
   	
   	

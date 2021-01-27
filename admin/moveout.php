@@ -13,12 +13,23 @@ include "../config.php";
          if (isset($_POST['but_submit'])) {
 
             $selectOption = $_POST['moveout'];
-            
+
+            $movequery2 = "SELECT * FROM dues WHERE auserid='$selectOption' AND isactivedue = '1'";
+            $result2 = mysqli_query($con, $movequery2);
+            $row2 = mysqli_fetch_assoc($result2);
+            if(is_null($row2['duesid'])){
             $updatequery = "UPDATE users SET quit_date = CURRENT_TIMESTAMP, isactive = '0' WHERE userid='$selectOption'";
             mysqli_query($con, $updatequery);
             $updatequery1 = "UPDATE flat SET isfull = '0', auserid = NULL WHERE auserid='$selectOption'";
             mysqli_query($con, $updatequery1);
             header('location: home.php');
+        } else {
+
+            echo '<script language="javascript">';
+            echo 'alert("User has unpaid dues.")';
+            echo '</script>';
+        
+        }
 
          }
          

@@ -43,6 +43,7 @@ if(isset($_POST['but_submit']))
         $name = $row1['firstname'];
         $lastname = $row1['lastname'];
         $active = $row1['isactive'];
+        $_SESSION['regdate'] = $row1['reg_date'];
         
 
         $_SESSION['isadmin']=$isadmin;

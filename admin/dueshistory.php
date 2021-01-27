@@ -150,20 +150,20 @@ include "../config.php";
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>Dues Date</th>
                                                 <th>Door Number</th>
                                                 <th>Amount</th>
                                                 <th>Details</th>
                                                 <th>Is Paid</th>
-                                                <th>Dues Date</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
+                                                <th>Dues Date</th>
                                                 <th>Door Number</th>
                                                 <th>Amount</th>
                                                 <th>Details</th>
                                                 <th>Is Paid</th>
-                                                <th>Dues Date</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
@@ -175,8 +175,8 @@ include "../config.php";
                                                     $ispaid = "Yes";
                                                 }
 
-                                            echo "<tr><td>" . $row1['flatid'] . "</td><td>" . $row1['amount'] . "</td><td>" . $row1['details'] ."</td><td>" . $ispaid . "</td><td>" 
-                                             . $row1['ddate']. "</td></tr>";  //$row['index'] the index here is a field name
+                                            echo "<tr><td>" . $row1['ddate'] . "</td><td>" . $row1['flatid'] . "</td><td>" . $row1['amount'] ."</td><td>" . $row1['details'] . "</td><td>" 
+                                             . $ispaid. "</td></tr>";  //$row['index'] the index here is a field name
                                             }
                                             ?>
                                             

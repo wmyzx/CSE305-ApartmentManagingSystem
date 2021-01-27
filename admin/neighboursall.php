@@ -8,7 +8,7 @@ include "../config.php";
 
 	
 
-	$neigquery = "SELECT * FROM users INNER JOIN flat ON users.doornumber = flat.flatid INNER JOIN dues ON flat.flatid = dues.flatid GROUP BY users.doornumber";
+	$neigquery = "SELECT * FROM users ";
   	$result = mysqli_query($con, $neigquery);
   	
   	

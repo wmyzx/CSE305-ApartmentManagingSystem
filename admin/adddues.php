@@ -24,15 +24,17 @@ include "../config.php";
     }
 
             if (count($errors) == 0) {
-                $query1 = "SELECT flatid FROM flat WHERE isfull = '1'";
+                $query1 = "SELECT * FROM flat WHERE isfull = '1'";
                     $result = mysqli_query($con, $query1);
                     while($row = mysqli_fetch_array($result)){
                         $flatid = $row['flatid'];
+                        $auserid = $row['auserid'];
                         
-                    $query2 = "INSERT INTO dues (flatid, amount, details, isactivedue, ddate, adminid) VALUES('$flatid', '$amount', '$details', '1', '$date', '$userid')";
+                    $query2 = "INSERT INTO dues (flatid, amount, details, isactivedue, ddate, adminid, auserid) VALUES('$flatid', '$amount', '$details', '1', '$date', '$userid', '$auserid')";
                     mysqli_query($con, $query2);
-            }
 
+            }
+            header("location: dueshistory.php");
         }
         }
         

@@ -8,7 +8,7 @@ include "../config.php";
      $id = $_SESSION['id'];
     $flatid = $_SESSION['doornumber'];
 
-    $duesquery = "SELECT * FROM transaction INNER JOIN dues ON transaction.tduesid = dues.duesid WHERE doornumber='$flatid'";
+    $duesquery = "SELECT * FROM transaction INNER JOIN dues ON transaction.tduesid = dues.duesid WHERE userid='$id'";
     $result = mysqli_query($con, $duesquery);
 
 

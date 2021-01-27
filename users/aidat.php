@@ -154,7 +154,7 @@ include "../config.php";
                                                 </div>
                                             </div>
                                             <?php 
-                                            $query = "SELECT amount, ddate, duesid FROM dues WHERE flatid='$doornumber' AND isactivedue = '1' ORDER BY ddate ASC" ?>
+                                            $query2 = "SELECT amount, ddate, duesid FROM dues WHERE flatid='$doornumber' AND isactivedue = '1' ORDER BY ddate ASC" ?>
                                             <div class="form-group">
                                                 <label for="c-form-profession">
                                                <span class="label-text">Select dues that you want to pay</span> 
@@ -162,9 +162,9 @@ include "../config.php";
                                               </label>
                                               <select name="duesid" class="c-form-profession form-control" id="c-form-profession">
                                           <?php
-                                            $result = mysqli_query($con, $query);
+                                            $result2 = mysqli_query($con, $query2);
 
-                                            while($row = mysqli_fetch_array($result)){   
+                                            while($row = mysqli_fetch_array($result2)){   
                                                      $amount = $row['amount'];
                                                      $date   = $row['ddate'];
                                                      $id = $row['duesid'];
